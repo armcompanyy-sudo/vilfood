@@ -1,0 +1,10 @@
+node_modules
+dist
+dist-ssr
+*.local
+.DS_Store
+.vite
+
+# build cache & stray screenshots
+*.tsbuildinfo
+vilfood-app-screenshot*.png
