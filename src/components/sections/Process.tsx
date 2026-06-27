@@ -147,7 +147,7 @@ export function Process() {
                   {String(i + 1).padStart(2, "0")} / {String(t.process.steps.length).padStart(2, "0")}
                 </span>
                 <h3
-                  className={`mt-3 font-display text-4xl font-semibold transition-colors duration-500 md:text-5xl ${
+                  className={`mt-3 font-display text-[clamp(1.5rem,7.5vw,2.25rem)] font-semibold transition-colors duration-500 md:text-5xl ${
                     active === i ? "text-ink" : "text-ink/45"
                   }`}
                 >
