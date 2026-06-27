@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from "react";
 import { useI18n } from "../../lib/i18n";
-import { Eyebrow, SunSigil } from "../Sun";
+import { Eyebrow } from "../Sun";
 import { useScrollReveal } from "../../hooks/useScrollReveal";
 
 /**
@@ -108,18 +108,8 @@ export function Process() {
             </div>
           </div>
 
-          {/* steps with sun-arc rail */}
-          <div ref={stepsRef} className="relative order-2 md:pl-10">
-            {/* rail */}
-            <div className="absolute left-[7px] top-4 bottom-4 hidden w-px bg-ink/12 md:block" />
-            {/* travelling sun */}
-            <div
-              className="absolute left-0 hidden transition-[top] duration-700 ease-editorial md:block"
-              style={{ top: `calc(${(active / (t.process.steps.length - 1)) * 100}% - 8px)` }}
-            >
-              <SunSigil className="h-4 w-4 text-apricot-deep drop-shadow" />
-            </div>
-
+          {/* steps */}
+          <div ref={stepsRef} className="order-2">
             {t.process.steps.map((s, i) => (
               <div
                 key={i}
