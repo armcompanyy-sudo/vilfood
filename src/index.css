@@ -119,6 +119,15 @@
   }
 }
 
+/* Armenian headings: the display fonts use tight negative tracking that
+   cramps Armenian and shrinks the gaps between words. For hy, reset the
+   tracking and add a little word-spacing so words read clearly at every size.
+   Unlayered so it overrides the font-size utilities' letter-spacing. */
+html[lang="hy"] :is(h1, h2, h3) {
+  letter-spacing: normal;
+  word-spacing: 0.12em;
+}
+
 /* Custom cursor: hide native only where a fine pointer can hover */
 @media (hover: hover) and (pointer: fine) {
   .has-custom-cursor,
