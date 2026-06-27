@@ -1,18 +1,24 @@
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import { gsap, prefersReducedMotion } from "../lib/motion";
+
+/** Custom cursor only makes sense with a fine pointer that can hover. */
+function cursorEligible() {
+  if (typeof window === "undefined") return false;
+  if (prefersReducedMotion()) return false;
+  return window.matchMedia("(hover: hover) and (pointer: fine)").matches;
+}
 
 /**
  * A small warm dot that trails the cursor and swells over interactive
- * elements. Desktop-only: on touch / coarse pointers it never mounts and
- * the native cursor is kept (see index.css `.has-custom-cursor`).
+ * elements. Desktop-only: on touch / coarse pointers nothing renders at all
+ * (so there's no stray dot in the corner) and the native cursor is kept.
  */
 export function Cursor() {
   const dot = useRef<HTMLDivElement>(null);
+  const [enabled] = useState(cursorEligible);
 
   useEffect(() => {
-    if (prefersReducedMotion()) return;
-    if (!window.matchMedia("(hover: hover) and (pointer: fine)").matches) return;
-
+    if (!enabled) return;
     const el = dot.current!;
     document.documentElement.classList.add("has-custom-cursor");
     gsap.set(el, { xPercent: -50, yPercent: -50, opacity: 0 });
@@ -47,13 +53,15 @@ export function Cursor() {
       document.removeEventListener("pointerout", out);
       document.removeEventListener("pointerleave", leave);
     };
-  }, []);
+  }, [enabled]);
+
+  if (!enabled) return null;
 
   return (
     <div
       ref={dot}
       aria-hidden
-      className="pointer-events-none fixed left-0 top-0 z-[70] h-3 w-3 rounded-full"
+      className="pointer-events-none fixed left-0 top-0 z-[70] h-3 w-3 rounded-full opacity-0"
       style={{ backgroundColor: "rgba(142,36,52,0.9)", mixBlendMode: "multiply" }}
     />
   );
