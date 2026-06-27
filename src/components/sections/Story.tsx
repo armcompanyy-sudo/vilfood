@@ -9,16 +9,6 @@ export function Story() {
 
   return (
     <section id="story" ref={ref} className="relative overflow-hidden py-24 md:py-36">
-      {/* faint orchard fruit, drifting */}
-      <img
-        src="/img/fruit-peach.webp"
-        alt=""
-        aria-hidden
-        loading="lazy"
-        decoding="async"
-        className="animate-sun-drift pointer-events-none absolute -right-10 top-10 hidden w-64 opacity-20 md:block lg:w-80"
-      />
-
       <div className="mx-auto max-w-[1320px] px-5 sm:px-8">
         <div className="reveal">
           <Eyebrow>{t.story.eyebrow}</Eyebrow>
