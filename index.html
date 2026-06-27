@@ -16,16 +16,32 @@
     />
     <meta property="og:type" content="website" />
 
-    <!-- Fonts: Fraunces (display, optical-size axis) + Hanken Grotesk (UI/body).
-         Noto Serif/Sans Armenian and Playfair/Noto Sans (Cyrillic) are listed as
-         per-glyph fallbacks for HY/RU — their binaries load lazily via unicode-range,
-         so the default English experience stays light. -->
+    <!-- Preload the hero image (LCP) so it downloads in parallel with the JS bundle. -->
+    <link rel="preload" as="image" href="/img/hero-landscape.webp" type="image/webp" fetchpriority="high" />
+
+    <!-- Fonts: Fraunces (display) + Hanken Grotesk (UI/body); Noto + Playfair are
+         per-glyph fallbacks for HY/RU (loaded only when those glyphs appear).
+         Loaded asynchronously (media=print → all) so they never block first paint;
+         display=swap shows fallback text immediately, then swaps. -->
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
-      href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400..700;1,9..144,400..600&family=Hanken+Grotesk:wght@400;500;600;700&family=Noto+Sans+Armenian:wght@400;500;700&family=Noto+Serif+Armenian:wght@500;700&family=Noto+Sans:wght@400;500;700&family=Playfair+Display:ital,wght@0,600;0,700;1,600&display=swap"
-      rel="stylesheet"
+      rel="preload"
+      as="style"
+      href="https://fonts.googleapis.com/css2?family=Fraunces:ital,wght@0,400..700;1,400..600&family=Hanken+Grotesk:wght@400;500;600;700&family=Noto+Sans+Armenian:wght@400;500;700&family=Noto+Serif+Armenian:wght@500;700&family=Noto+Sans:wght@400;500;700&family=Playfair+Display:ital,wght@0,600;0,700;1,600&display=swap"
     />
+    <link
+      rel="stylesheet"
+      href="https://fonts.googleapis.com/css2?family=Fraunces:ital,wght@0,400..700;1,400..600&family=Hanken+Grotesk:wght@400;500;600;700&family=Noto+Sans+Armenian:wght@400;500;700&family=Noto+Serif+Armenian:wght@500;700&family=Noto+Sans:wght@400;500;700&family=Playfair+Display:ital,wght@0,600;0,700;1,600&display=swap"
+      media="print"
+      onload="this.media='all'"
+    />
+    <noscript>
+      <link
+        rel="stylesheet"
+        href="https://fonts.googleapis.com/css2?family=Fraunces:ital,wght@0,400..700;1,400..600&family=Hanken+Grotesk:wght@400;500;600;700&family=Noto+Sans+Armenian:wght@400;500;700&family=Noto+Serif+Armenian:wght@500;700&family=Noto+Sans:wght@400;500;700&family=Playfair+Display:ital,wght@0,600;0,700;1,600&display=swap"
+      />
+    </noscript>
 
     <title>Vilfood — Sunlight, sealed since 2007</title>
   </head>

@@ -14,6 +14,8 @@ export function Story() {
         src="/img/fruit-peach.webp"
         alt=""
         aria-hidden
+        loading="lazy"
+        decoding="async"
         className="animate-sun-drift pointer-events-none absolute -right-10 top-10 hidden w-64 opacity-20 md:block lg:w-80"
       />
 

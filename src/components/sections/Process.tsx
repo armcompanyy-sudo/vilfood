@@ -86,6 +86,8 @@ export function Process() {
                       src={v.img}
                       alt=""
                       aria-hidden
+                      loading="lazy"
+                      decoding="async"
                       className="h-full w-full object-cover"
                       style={{ objectPosition: v.pos }}
                     />
@@ -130,6 +132,8 @@ export function Process() {
                     src={VISUALS[i]?.img}
                     alt=""
                     aria-hidden
+                    loading="lazy"
+                    decoding="async"
                     className="aspect-[4/3] w-full object-cover"
                     style={{ objectPosition: VISUALS[i]?.pos }}
                   />

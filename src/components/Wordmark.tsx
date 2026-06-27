@@ -6,9 +6,11 @@
 export function Wordmark({
   variant = "dark",
   className = "",
+  loading = "eager",
 }: {
   variant?: "dark" | "white";
   className?: string;
+  loading?: "eager" | "lazy";
 }) {
   return (
     <img
@@ -18,6 +20,8 @@ export function Wordmark({
       height={317}
       className={className}
       draggable={false}
+      loading={loading}
+      decoding="async"
     />
   );
 }

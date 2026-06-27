@@ -28,7 +28,7 @@ export function Footer() {
 
         <div className="mt-16 flex flex-col gap-10 border-t border-cream/12 pt-10 md:flex-row md:items-start md:justify-between">
           <div className="max-w-xs">
-            <Wordmark variant="white" className="h-5 w-auto" />
+            <Wordmark variant="white" className="h-5 w-auto" loading="lazy" />
             <p className="mt-4 text-sm leading-relaxed text-cream/55">
               {t.contact.address}
               <br />
