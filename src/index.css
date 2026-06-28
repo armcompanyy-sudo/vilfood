@@ -124,8 +124,8 @@
    tracking and add a little word-spacing so words read clearly at every size.
    Unlayered so it overrides the font-size utilities' letter-spacing. */
 html[lang="hy"] :is(h1, h2, h3) {
-  letter-spacing: normal;
-  word-spacing: 0.12em;
+  letter-spacing: 0.03em;
+  word-spacing: 0.16em;
 }
 
 /* Custom cursor: hide native only where a fine pointer can hover */
