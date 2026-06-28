@@ -18,7 +18,7 @@ export function Contact() {
   const ref = useScrollReveal<HTMLElement>();
   const [values, setValues] = useState({ name: "", email: "", message: "" });
   const [errors, setErrors] = useState<Errors>({});
-  const [status, setStatus] = useState<"idle" | "sending" | "done">("idle");
+  const [status, setStatus] = useState<"idle" | "sending" | "done" | "error">("idle");
 
   const set = (k: keyof typeof values) => (e: { target: { value: string } }) =>
     setValues((v) => ({ ...v, [k]: e.target.value }));
@@ -32,12 +32,23 @@ export function Contact() {
     return Object.keys(next).length === 0;
   };
 
-  // No backend — stub the submit with a short pending state, then thank-you.
-  const onSubmit = (e: FormEvent) => {
+  // POST to the serverless function (api/contact.js), which emails info@vilfood.am.
+  const onSubmit = async (e: FormEvent) => {
     e.preventDefault();
+    if (status === "sending") return;
     if (!validate()) return;
     setStatus("sending");
-    window.setTimeout(() => setStatus("done"), 700);
+    try {
+      const res = await fetch("/api/contact", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(values),
+      });
+      if (!res.ok) throw new Error("send failed");
+      setStatus("done");
+    } catch {
+      setStatus("error");
+    }
   };
 
   const fieldClass = (err?: string) =>
@@ -166,6 +177,11 @@ export function Contact() {
                 )}
               </div>
 
+              {status === "error" && (
+                <p role="alert" className="text-sm text-pomegranate">
+                  {t.contact.errSend}
+                </p>
+              )}
               <Button type="submit" magnetic={false} className="mt-1 self-start">
                 {status === "sending" ? t.contact.sending : t.contact.send}
               </Button>

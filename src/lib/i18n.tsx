@@ -126,6 +126,7 @@ export interface Dict {
     errName: string;
     errEmail: string;
     errMsg: string;
+    errSend: string;
     addrLabel: string;
     address: string;
     phoneLabel: string;
@@ -253,6 +254,7 @@ const en: Dict = {
     errName: "Please tell us your name.",
     errEmail: "Please enter a valid email.",
     errMsg: "Please add a short message.",
+    errSend: "Couldn't send — please try again, or email us directly.",
     addrLabel: "Visit",
     address: "Vanatur 1, Hrazdan, Kotayk Province, Armenia",
     phoneLabel: "Call",
@@ -380,6 +382,7 @@ const ru: DeepPartial<Dict> = {
     errName: "Пожалуйста, представьтесь.",
     errEmail: "Введите корректный адрес почты.",
     errMsg: "Добавьте короткое сообщение.",
+    errSend: "Не удалось отправить — попробуйте ещё раз или напишите нам напрямую.",
     addrLabel: "Адрес",
     address: "ул. Ванатур 1, Раздан, Котайкская область, Армения",
     phoneLabel: "Телефон",
@@ -507,6 +510,7 @@ const hy: DeepPartial<Dict> = {
     errName: "Խնդրում ենք նշել ձեր անունը։",
     errEmail: "Մուտքագրեք վավեր էլ. փոստի հասցե։",
     errMsg: "Ավելացրեք կարճ հաղորդագրություն։",
+    errSend: "Չհաջողվեց ուղարկել — փորձեք նորից կամ գրեք մեզ ուղիղ։",
     addrLabel: "Հասցե",
     address: "Վանատուր 1, Հրազդան, Կոտայքի մարզ, Հայաստան",
     phoneLabel: "Հեռախոս",
