@@ -59,8 +59,8 @@ export function Footer() {
           <div className="flex flex-col gap-5">
             <div className="flex gap-3">
               {[
-                { label: "Instagram", href: "https://instagram.com" },
-                { label: "Facebook", href: "https://facebook.com" },
+                { label: "Instagram", href: "https://www.instagram.com/vilfood/" },
+                { label: "Facebook", href: "https://www.facebook.com/Vilfood/" },
               ].map((s) => (
                 <a
                   key={s.label}
