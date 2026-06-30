@@ -88,11 +88,11 @@ export function Hero() {
       <picture>
         <source
           type="image/webp"
-          srcSet="/img/hero-1024.webp 1024w, /img/hero-1536.webp 1536w, /img/hero-2560.webp 2560w"
+          srcSet="/img/hero4k-1280.webp 1280w, /img/hero4k-1920.webp 1920w, /img/hero4k-2560.webp 2560w, /img/hero4k-3840.webp 3840w"
           sizes="100vw"
         />
         <img
-          src="/img/hero-1536.jpg"
+          src="/img/hero4k-1920.jpg"
           alt={t.a11y.heroImage}
           className="absolute inset-0 -z-20 h-full w-full object-cover object-[68%_96%]"
         />
