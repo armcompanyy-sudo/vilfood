@@ -10,10 +10,10 @@ import { useScrollReveal } from "../../hooks/useScrollReveal";
  * frame at every size. `bg` only shows for a beat while the image loads.
  */
 const VISUALS = [
-  { img: "/img/process-harvest.webp", pos: "50% 42%", bg: "#cfe0c4" },
-  { img: "/img/process-prepare.webp", pos: "50% 45%", bg: "#d6e0c9" },
-  { img: "/img/process-seal.webp", pos: "50% 48%", bg: "#e6d6c2" },
-  { img: "/img/process-deliver.webp", pos: "52% 50%", bg: "#dfe4ea" },
+  { img: "/img/process-harvest-v2.webp", pos: "50% 40%", bg: "#cfe0c4" },
+  { img: "/img/process-prepare-v2.webp", pos: "50% 45%", bg: "#d6e0c9" },
+  { img: "/img/process-seal-v2.webp", pos: "50% 42%", bg: "#e6d6c2" },
+  { img: "/img/process-deliver-v2.webp", pos: "50% 45%", bg: "#dfe4ea" },
 ];
 
 export function Process() {
