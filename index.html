@@ -17,7 +17,14 @@
     <meta property="og:type" content="website" />
 
     <!-- Preload the hero image (LCP) so it downloads in parallel with the JS bundle. -->
-    <link rel="preload" as="image" href="/img/hero-landscape-v5.webp" type="image/webp" fetchpriority="high" />
+    <link
+      rel="preload"
+      as="image"
+      type="image/webp"
+      imagesrcset="/img/hero-1024.webp 1024w, /img/hero-1536.webp 1536w, /img/hero-2560.webp 2560w"
+      imagesizes="100vw"
+      fetchpriority="high"
+    />
 
     <!-- Fonts: Fraunces (display) + Hanken Grotesk (UI/body); Noto + Playfair are
          per-glyph fallbacks for HY/RU (loaded only when those glyphs appear).
