@@ -90,7 +90,7 @@ export function Hero() {
         <img
           src="/img/hero-landscape-v5.jpg"
           alt={t.a11y.heroImage}
-          className="absolute inset-0 -z-20 h-full w-full object-cover object-[68%_88%]"
+          className="absolute inset-0 -z-20 h-full w-full object-cover object-[68%_96%]"
         />
       </picture>
 
