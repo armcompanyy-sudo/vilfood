@@ -86,9 +86,9 @@ export function Hero() {
     >
       {/* full-bleed landscape */}
       <picture>
-        <source srcSet="/img/hero-landscape-v2.webp" type="image/webp" />
+        <source srcSet="/img/hero-landscape-v3.webp" type="image/webp" />
         <img
-          src="/img/hero-landscape-v2.jpg"
+          src="/img/hero-landscape-v3.jpg"
           alt={t.a11y.heroImage}
           className="absolute inset-0 -z-20 h-full w-full object-cover object-[68%_center]"
         />
