@@ -29,7 +29,6 @@ export function Nav() {
     { id: "story", label: t.nav.story },
     { id: "products", label: t.nav.products },
     { id: "process", label: t.nav.process },
-    { id: "find", label: t.nav.find },
     { id: "contact", label: t.nav.contact },
   ];
 
@@ -61,7 +60,7 @@ export function Nav() {
         </a>
 
         {/* center links (desktop) */}
-        <ul className="hidden items-center gap-8 lg:flex">
+        <ul className="hidden flex-1 items-center justify-center gap-8 lg:flex">
           {links.map((l) => (
             <li key={l.id}>
               <a
