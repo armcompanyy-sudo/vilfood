@@ -71,10 +71,10 @@ export function Process() {
           </p>
         </div>
 
-        <div className="mt-16 grid gap-10 md:grid-cols-2 md:gap-16">
+        <div className="mt-8 grid gap-10 md:grid-cols-2 md:gap-16">
           {/* sticky visual (desktop) — crossfades through the four steps */}
           <div className="order-1 hidden md:block">
-            <div className="sticky top-0 flex h-screen items-center">
+            <div className="sticky top-0 flex h-[82vh] items-center">
               <div className="relative aspect-[4/3] w-full overflow-hidden rounded-jar shadow-warm-lg">
                 {VISUALS.map((v, i) => (
                   <div
@@ -114,7 +114,7 @@ export function Process() {
               <div
                 key={i}
                 data-step
-                className="flex min-h-[52vh] flex-col justify-center border-t border-ink/10 py-10 first:border-t-0 md:min-h-[80vh] md:border-t-0"
+                className="flex min-h-[52vh] flex-col justify-center border-t border-ink/10 py-10 first:border-t-0 md:min-h-[60vh] md:border-t-0"
               >
                 {/* per-step illustration (mobile only — desktop uses the sticky visual) */}
                 <div className="mb-7 overflow-hidden rounded-jar shadow-warm md:hidden">
