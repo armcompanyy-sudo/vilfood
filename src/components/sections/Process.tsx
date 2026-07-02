@@ -114,8 +114,10 @@ export function Process() {
               <div
                 key={i}
                 data-step
-                className={`flex min-h-[52vh] flex-col justify-center border-t border-ink/10 py-10 first:border-t-0 md:border-t-0 ${
-                  i === 0 ? "md:min-h-[58vh]" : "md:min-h-[86vh]"
+                className={`flex min-h-[52vh] flex-col justify-center border-t border-ink/10 py-10 first:border-t-0 md:min-h-[86vh] md:border-t-0 ${
+                  // first step's content sits up top so the gap after the intro
+                  // stays tight, while every step keeps the same scroll runway
+                  i === 0 ? "md:justify-start" : ""
                 }`}
               >
                 {/* per-step illustration (mobile only — desktop uses the sticky visual) */}
