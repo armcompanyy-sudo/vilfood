@@ -66,14 +66,19 @@ export function Hero() {
   // headline entrance — unaffected by reduced motion (which skips it entirely)
   useEffect(() => {
     if (prefersReducedMotion()) return;
+    // On desktop, stretch the entrance out for a slower, smoother reveal;
+    // phones keep the snappier timing so the hero doesn't feel sluggish.
+    const desktop = window.matchMedia("(min-width: 768px)").matches;
+    const k = desktop ? 1.5 : 1; // duration/stagger multiplier
+    const ease = desktop ? "power3.out" : "power4.out"; // gentler settle on desktop
     const ctx = gsap.context(() => {
       gsap.set("[data-hero-line]", { yPercent: 130 });
-      const tl = gsap.timeline({ delay: 0.15, defaults: { ease: "power4.out" } });
-      tl.to("[data-hero-line]", { yPercent: 0, duration: 1.1, stagger: 0.12 })
-        .from("[data-hero-eyebrow]", { opacity: 0, y: 16, duration: 0.8 }, 0.2)
-        .from("[data-hero-sub]", { opacity: 0, y: 20, duration: 0.9 }, 0.5)
-        .from("[data-hero-cta]", { opacity: 0, y: 20, duration: 0.8, stagger: 0.1 }, 0.7)
-        .from("[data-hero-scroll]", { opacity: 0, duration: 0.8 }, 1.0);
+      const tl = gsap.timeline({ delay: 0.15, defaults: { ease } });
+      tl.to("[data-hero-line]", { yPercent: 0, duration: 1.1 * k, stagger: 0.12 * k })
+        .from("[data-hero-eyebrow]", { opacity: 0, y: 16, duration: 0.8 * k }, 0.2 * k)
+        .from("[data-hero-sub]", { opacity: 0, y: 20, duration: 0.9 * k }, 0.5 * k)
+        .from("[data-hero-cta]", { opacity: 0, y: 20, duration: 0.8 * k, stagger: 0.1 * k }, 0.7 * k)
+        .from("[data-hero-scroll]", { opacity: 0, duration: 0.8 * k }, 1.0 * k);
     }, sectionRef);
     return () => ctx.revert();
   }, []);
