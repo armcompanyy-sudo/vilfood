@@ -114,7 +114,9 @@ export function Process() {
               <div
                 key={i}
                 data-step
-                className="flex min-h-[52vh] flex-col justify-center border-t border-ink/10 py-10 first:border-t-0 md:min-h-[60vh] md:border-t-0"
+                className={`flex min-h-[52vh] flex-col justify-center border-t border-ink/10 py-10 first:border-t-0 md:border-t-0 ${
+                  i === 0 ? "md:min-h-[58vh]" : "md:min-h-[86vh]"
+                }`}
               >
                 {/* per-step illustration (mobile only — desktop uses the sticky visual) */}
                 <div className="mb-7 overflow-hidden rounded-jar shadow-warm md:hidden">
