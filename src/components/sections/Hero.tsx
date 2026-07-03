@@ -117,7 +117,7 @@ export function Hero() {
           preload="auto"
           aria-hidden="true"
         >
-          <source src="/video/hero.mp4" type="video/mp4" />
+          <source src="/video/hero-loop.mp4" type="video/mp4" />
         </video>
       )}
 
