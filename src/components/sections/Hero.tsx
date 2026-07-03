@@ -62,8 +62,21 @@ function HeroCopy() {
 export function Hero() {
   const { t } = useI18n();
   const sectionRef = useRef<HTMLElement>(null);
+  const videoRef = useRef<HTMLVideoElement>(null);
   // Reduced-motion users get the static image instead of the autoplay video.
   const [reduceMotion] = useState(() => prefersReducedMotion());
+
+  // Play the background video a touch slower for a calmer, more premium feel.
+  useEffect(() => {
+    const v = videoRef.current;
+    if (!v) return;
+    const setRate = () => {
+      v.playbackRate = 0.8;
+    };
+    setRate();
+    v.addEventListener("loadedmetadata", setRate);
+    return () => v.removeEventListener("loadedmetadata", setRate);
+  }, [reduceMotion]);
 
   // headline entrance — unaffected by reduced motion (which skips it entirely)
   useEffect(() => {
@@ -107,6 +120,7 @@ export function Hero() {
         </picture>
       ) : (
         <video
+          ref={videoRef}
           className="absolute inset-0 -z-20 h-full w-full object-cover object-[50%_58%]"
           poster="/img/hero-video-poster.webp"
           autoPlay
