@@ -79,8 +79,7 @@ export function Hero() {
       tl.to("[data-hero-line]", { yPercent: 0, duration: 1.1 * k, stagger: 0.12 * k })
         .from("[data-hero-eyebrow]", { opacity: 0, y: 16, duration: 0.8 * k }, 0.2 * k)
         .from("[data-hero-sub]", { opacity: 0, y: 20, duration: 0.9 * k }, 0.5 * k)
-        .from("[data-hero-cta]", { opacity: 0, y: 20, duration: 0.8 * k, stagger: 0.1 * k }, 0.7 * k)
-        .from("[data-hero-scroll]", { opacity: 0, duration: 0.8 * k }, 1.0 * k);
+        .from("[data-hero-cta]", { opacity: 0, y: 20, duration: 0.8 * k, stagger: 0.1 * k }, 0.7 * k);
     }, sectionRef);
     return () => ctx.revert();
   }, []);
@@ -155,15 +154,6 @@ export function Hero() {
       {/* copy */}
       <div className="mx-auto w-full max-w-[1320px] px-5 sm:px-8">
         <HeroCopy />
-      </div>
-
-      {/* scroll hint */}
-      <div
-        data-hero-scroll
-        className="absolute bottom-7 left-1/2 flex -translate-x-1/2 flex-col items-center gap-2 text-ink/55"
-      >
-        <span className="eyebrow">{t.hero.scroll}</span>
-        <span className="h-9 w-px animate-sun-drift bg-ink/35" />
       </div>
     </section>
   );
