@@ -1,4 +1,4 @@
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useI18n } from "../../lib/i18n";
 import { Button } from "../Button";
 import { Eyebrow } from "../Sun";
@@ -62,6 +62,8 @@ function HeroCopy() {
 export function Hero() {
   const { t } = useI18n();
   const sectionRef = useRef<HTMLElement>(null);
+  // Reduced-motion users get the static image instead of the autoplay video.
+  const [reduceMotion] = useState(() => prefersReducedMotion());
 
   // headline entrance — unaffected by reduced motion (which skips it entirely)
   useEffect(() => {
@@ -89,19 +91,35 @@ export function Hero() {
       ref={sectionRef}
       className="relative flex min-h-[100svh] items-center overflow-hidden"
     >
-      {/* full-bleed landscape */}
-      <picture>
-        <source
-          type="image/webp"
-          srcSet="/img/hero4k-1280.webp 1280w, /img/hero4k-1920.webp 1920w, /img/hero4k-2560.webp 2560w, /img/hero4k-3840.webp 3840w"
-          sizes="100vw"
-        />
-        <img
-          src="/img/hero4k-1920.jpg"
-          alt={t.a11y.heroImage}
-          className="absolute inset-0 -z-20 h-full w-full object-cover object-[68%_96%]"
-        />
-      </picture>
+      {/* full-bleed hero background — looping muted video (still image for
+          reduced-motion users; the poster shows instantly while it buffers) */}
+      {reduceMotion ? (
+        <picture>
+          <source
+            type="image/webp"
+            srcSet="/img/hero4k-1280.webp 1280w, /img/hero4k-1920.webp 1920w, /img/hero4k-2560.webp 2560w, /img/hero4k-3840.webp 3840w"
+            sizes="100vw"
+          />
+          <img
+            src="/img/hero4k-1920.jpg"
+            alt={t.a11y.heroImage}
+            className="absolute inset-0 -z-20 h-full w-full object-cover object-[68%_96%]"
+          />
+        </picture>
+      ) : (
+        <video
+          className="absolute inset-0 -z-20 h-full w-full object-cover object-[50%_58%]"
+          poster="/img/hero-video-poster.webp"
+          autoPlay
+          muted
+          loop
+          playsInline
+          preload="auto"
+          aria-hidden="true"
+        >
+          <source src="/video/hero.mp4" type="video/mp4" />
+        </video>
+      )}
 
       {/* legibility scrims */}
       {/* desktop: cream wash on the left, landscape revealed to the right */}

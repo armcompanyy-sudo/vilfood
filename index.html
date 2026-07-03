@@ -16,15 +16,8 @@
     />
     <meta property="og:type" content="website" />
 
-    <!-- Preload the hero image (LCP) so it downloads in parallel with the JS bundle. -->
-    <link
-      rel="preload"
-      as="image"
-      type="image/webp"
-      imagesrcset="/img/hero4k-1280.webp 1280w, /img/hero4k-1920.webp 1920w, /img/hero4k-2560.webp 2560w, /img/hero4k-3840.webp 3840w"
-      imagesizes="100vw"
-      fetchpriority="high"
-    />
+    <!-- Preload the hero video poster (LCP) so the first frame paints instantly. -->
+    <link rel="preload" as="image" href="/img/hero-video-poster.webp" type="image/webp" fetchpriority="high" />
 
     <!-- Fonts: Fraunces (display) + Hanken Grotesk (UI/body); Noto + Playfair are
          per-glyph fallbacks for HY/RU (loaded only when those glyphs appear).
