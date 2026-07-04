@@ -270,7 +270,7 @@ export function Products() {
         {/* header */}
         <div
           ref={headerRef}
-          className="mx-auto w-full max-w-[1320px] px-5 pt-24 sm:px-8 md:pt-[5.5rem]"
+          className="relative z-20 mx-auto w-full max-w-[1320px] px-5 pt-24 sm:px-8 md:pt-[5.5rem]"
         >
           <div className="reveal">
             <Eyebrow>{t.products.eyebrow}</Eyebrow>
