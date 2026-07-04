@@ -467,8 +467,11 @@ function JarOverlay({ p, onClose }: { p: CatalogueProduct; onClose: () => void }
   }, []);
 
   const whereToBuy = () => {
+    // release the scroll lock first — the glide to the map starts behind the
+    // dissolving overlay instead of racing its close animation
+    getLenis()?.start();
+    scrollToId("find");
     close();
-    window.setTimeout(() => scrollToId("find"), 420);
   };
 
   return (
