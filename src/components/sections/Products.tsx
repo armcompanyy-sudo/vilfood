@@ -69,7 +69,12 @@ export function Products() {
       }
       const h = window.innerHeight;
       const s = h < 720 ? 0.7 : h < 800 ? 0.82 : h < 880 ? 0.9 : 1;
-      track.style.setProperty("--jar-scale", String(s));
+      const next = String(s);
+      if (track.style.getPropertyValue("--jar-scale") !== next) {
+        track.style.setProperty("--jar-scale", next);
+        // the track just changed width — remeasure the scrub distance
+        ScrollTrigger.refresh();
+      }
     };
     apply();
     window.addEventListener("resize", apply);
@@ -320,7 +325,7 @@ export function Products() {
           >
             <div
               ref={trackRef}
-              className="flex h-full w-max items-end gap-8 pl-5 pr-16 [--jar-scale:0.68] sm:pl-8 md:gap-11 md:pl-[max(2rem,calc((100vw-1320px)/2+2rem))] md:pr-[18vw] md:[--jar-scale:1]"
+              className="flex h-full w-max items-end gap-8 pl-5 pr-12 [--jar-scale:0.68] sm:pl-8 md:gap-11 md:pl-[max(2rem,calc((100vw-1320px)/2+2rem))] md:pr-20 md:[--jar-scale:1]"
               style={{ paddingBottom: BASELINE }}
             >
               {GROUPS.map(({ cat, items }, gi) => (
