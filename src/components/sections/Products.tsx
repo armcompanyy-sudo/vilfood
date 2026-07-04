@@ -276,7 +276,7 @@ export function Products() {
             <Eyebrow>{t.products.eyebrow}</Eyebrow>
           </div>
           <div className="mt-4 flex flex-col gap-4 md:flex-row md:items-end md:justify-between">
-            <h2 className="reveal max-w-2xl font-display text-display-md font-semibold leading-[1.05] text-cream">
+            <h2 key={locale} data-choreo className="max-w-2xl font-display text-display-md font-semibold leading-[1.05] text-cream">
               {t.products.title}
             </h2>
             <p className="reveal max-w-sm text-pretty text-cream/65 md:text-right">

@@ -126,6 +126,12 @@
   }
 }
 
+/* Choreographed titles stay hidden until SplitText has carved them into
+   masked lines (HeadlineChoreo reveals them; reduced-motion shows them as-is). */
+[data-choreo] {
+  visibility: hidden;
+}
+
 /* Armenian headings: the display fonts use tight negative tracking that
    cramps Armenian and shrinks the gaps between words. For hy, reset the
    tracking and add a little word-spacing so words read clearly at every size.

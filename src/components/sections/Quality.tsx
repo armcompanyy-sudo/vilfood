@@ -3,7 +3,7 @@ import { Eyebrow, SunSigil } from "../Sun";
 import { useScrollReveal } from "../../hooks/useScrollReveal";
 
 export function Quality() {
-  const { t } = useI18n();
+  const { t, locale } = useI18n();
   const ref = useScrollReveal<HTMLElement>();
 
   return (
@@ -25,7 +25,7 @@ export function Quality() {
         <div className="reveal flex justify-center">
           <Eyebrow tone="cream">{t.quality.eyebrow}</Eyebrow>
         </div>
-        <h2 className="reveal mx-auto mt-7 max-w-3xl font-display text-display-md font-semibold leading-[1.05] text-cream">
+        <h2 key={locale} data-choreo className="mx-auto mt-7 max-w-3xl font-display text-display-md font-semibold leading-[1.05] text-cream">
           {t.quality.title}
         </h2>
         <p className="reveal mx-auto mt-8 max-w-2xl text-pretty text-lg leading-relaxed text-cream/75">

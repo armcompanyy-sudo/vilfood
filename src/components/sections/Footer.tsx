@@ -4,7 +4,7 @@ import { Wordmark } from "../Wordmark";
 import { LangToggle } from "../LangToggle";
 
 export function Footer() {
-  const { t } = useI18n();
+  const { t, locale } = useI18n();
   const links = [
     { id: "story", label: t.nav.story },
     { id: "products", label: t.nav.products },
@@ -22,7 +22,7 @@ export function Footer() {
       />
       <div className="mx-auto max-w-[1320px] px-5 sm:px-8">
         {/* closing line */}
-        <p className="max-w-3xl font-display text-display-sm font-semibold leading-[1.08] text-cream">
+        <p key={locale} data-choreo className="max-w-3xl font-display text-display-sm font-semibold leading-[1.08] text-cream">
           {t.footer.tagline}
         </p>
 

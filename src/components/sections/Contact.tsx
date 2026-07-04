@@ -14,7 +14,7 @@ interface Errors {
 }
 
 export function Contact() {
-  const { t } = useI18n();
+  const { t, locale } = useI18n();
   const ref = useScrollReveal<HTMLElement>();
   const [values, setValues] = useState({ name: "", email: "", message: "" });
   const [errors, setErrors] = useState<Errors>({});
@@ -64,7 +64,7 @@ export function Contact() {
           <div className="reveal">
             <Eyebrow>{t.contact.eyebrow}</Eyebrow>
           </div>
-          <h2 className="reveal mt-7 font-display text-display-md font-semibold leading-[1.05] text-ink">
+          <h2 key={locale} data-choreo className="mt-7 font-display text-display-md font-semibold leading-[1.05] text-ink">
             {t.contact.title}
           </h2>
           <p className="reveal mt-6 max-w-md text-pretty text-ink/70 md:text-lg">
