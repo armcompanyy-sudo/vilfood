@@ -4,6 +4,11 @@ import { gsap, ScrollTrigger, prefersReducedMotion } from "./motion";
 
 let lenisRef: Lenis | null = null;
 
+/** The live Lenis instance (null before mount / with reduced motion). */
+export function getLenis() {
+  return lenisRef;
+}
+
 /** Smooth-scroll to an element id (used by nav + anchor links). */
 export function scrollToId(id: string) {
   const el = document.getElementById(id);

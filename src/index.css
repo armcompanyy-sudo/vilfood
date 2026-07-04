@@ -110,6 +110,13 @@
   .text-balance {
     text-wrap: balance;
   }
+  /* horizontal scrollers that hide their scrollbar (the shelf) */
+  .no-scrollbar {
+    scrollbar-width: none;
+  }
+  .no-scrollbar::-webkit-scrollbar {
+    display: none;
+  }
   /* Reveal primitive — elements start hidden, GSAP lifts them in.
      If JS/GSAP never runs, a fallback below makes them visible. */
   .reveal {

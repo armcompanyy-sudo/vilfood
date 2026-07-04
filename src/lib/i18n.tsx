@@ -53,6 +53,7 @@ export interface Dict {
     heroImage: string;
     footerNav: string;
     stockist: string;
+    close: string;
   };
   nav: {
     story: string;
@@ -85,6 +86,7 @@ export interface Dict {
     title: string;
     intro: string;
     unit: string;
+    hint: string;
     cats: {
       all: string;
       sauces: string;
@@ -156,6 +158,7 @@ const en: Dict = {
       "Vilfood preserves set in an Armenian mountain landscape with poppies, pomegranates and a hilltop church",
     footerNav: "Footer",
     stockist: "stockist",
+    close: "Close",
   },
   nav: {
     story: "Story",
@@ -192,6 +195,7 @@ const en: Dict = {
     title: "The Vilfood pantry, jar by jar.",
     intro: "Tomato sauces, hand-packed pickles, vegetable spreads and orchard compotes — over twenty preserves, canned at the peak of the season.",
     unit: "ml",
+    hint: "Drag the shelf — or just keep scrolling",
     cats: {
       all: "All",
       sauces: "Tomatoes & Sauces",
@@ -284,6 +288,7 @@ const ru: DeepPartial<Dict> = {
       "Заготовки Vilfood на фоне армянского горного пейзажа с маками, гранатами и церковью на холме",
     footerNav: "Нижнее меню",
     stockist: "точка продаж",
+    close: "Закрыть",
   },
   nav: {
     story: "История",
@@ -320,6 +325,7 @@ const ru: DeepPartial<Dict> = {
     title: "Кладовая Vilfood — банка за банкой.",
     intro: "Томатные соусы, соленья ручной закатки, овощные закуски и фруктовые компоты — более двадцати заготовок, закрытых на пике сезона.",
     unit: "мл",
+    hint: "Тяните полку — или просто листайте",
     cats: {
       all: "Все",
       sauces: "Томаты и соусы",
@@ -412,6 +418,7 @@ const hy: DeepPartial<Dict> = {
       "Vilfood-ի պահածոները հայկական լեռնային բնապատկերի ֆոնին՝ կակաչներով, նռներով և բլրի վրա կանգնած եկեղեցով",
     footerNav: "Ստորին ընտրացանկ",
     stockist: "վաճառակետ",
+    close: "Փակել",
   },
   nav: {
     story: "Պատմություն",
@@ -448,6 +455,7 @@ const hy: DeepPartial<Dict> = {
     title: "Vilfood-ի մառանը՝ բանկա առ բանկա։",
     intro: "Տոմատի սոուսներ, ձեռքով փակած թթուներ, բանջարեղենային նախուտեստներ և մրգային կոմպոտներ՝ ավելի քան քսան պահածո, փակված սեզոնի գագաթնակետին։",
     unit: "մլ",
+    hint: "Քաշեք դարակը կամ պարզապես ոլորեք",
     cats: {
       all: "Բոլորը",
       sauces: "Տոմատ և սոուս",
