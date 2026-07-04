@@ -121,17 +121,17 @@ export function Products() {
       });
       stRef.current = (tween.scrollTrigger as ST) ?? null;
 
-      // jars settle onto the plank as they enter from the right
+      // jars are set down onto the plank as they enter from the right
       track.querySelectorAll<HTMLElement>("[data-jar]").forEach((el) => {
         gsap.from(el, {
-          y: 26,
-          rotation: 2.5,
-          duration: 0.7,
+          y: -16,
+          rotation: -1.5,
+          duration: 0.6,
           ease: EASE,
           scrollTrigger: {
             containerAnimation: tween,
             trigger: el,
-            start: "left 98%",
+            start: "left 99%",
           },
         });
       });
@@ -357,12 +357,12 @@ export function Products() {
                         alt=""
                         draggable={false}
                         decoding="async"
-                        className="h-full w-auto max-w-none select-none drop-shadow-[0_20px_26px_rgba(0,0,0,0.55)] transition-transform duration-500 ease-editorial group-hover/jar:-translate-y-3 group-hover/jar:rotate-[1.6deg] group-hover/jar:scale-[1.04]"
+                        className="h-full w-auto max-w-none translate-y-[2px] select-none drop-shadow-[0_20px_26px_rgba(0,0,0,0.55)] transition-transform duration-500 ease-editorial group-hover/jar:-translate-y-3 group-hover/jar:rotate-[1.6deg] group-hover/jar:scale-[1.04]"
                       />
-                      {/* grounding shadow on the plank */}
+                      {/* contact shadow pinned right under the glass base */}
                       <span
                         aria-hidden
-                        className="absolute -bottom-1.5 left-1/2 h-3 w-[68%] -translate-x-1/2 rounded-full bg-black/55 blur-md transition-all duration-500 ease-editorial group-hover/jar:scale-x-90 group-hover/jar:bg-black/35"
+                        className="absolute -bottom-0.5 left-1/2 h-2.5 w-[74%] -translate-x-1/2 rounded-[50%] bg-black/60 blur-[5px] transition-all duration-500 ease-editorial group-hover/jar:scale-x-90 group-hover/jar:bg-black/35"
                       />
                       {/* name whispered on the plank face */}
                       <span className="eyebrow pointer-events-none absolute left-1/2 top-full mt-5 -translate-x-1/2 whitespace-nowrap text-[0.6rem] text-cream/0 transition-colors duration-300 group-hover/jar:text-cream/75">
