@@ -245,12 +245,12 @@ export function Products() {
         {/* header */}
         <div
           ref={headerRef}
-          className="mx-auto w-full max-w-[1320px] px-5 pt-24 sm:px-8 md:pt-28"
+          className="mx-auto w-full max-w-[1320px] px-5 pt-24 sm:px-8 md:pt-[5.5rem]"
         >
           <div className="reveal">
             <Eyebrow>{t.products.eyebrow}</Eyebrow>
           </div>
-          <div className="mt-6 flex flex-col gap-4 md:flex-row md:items-end md:justify-between">
+          <div className="mt-4 flex flex-col gap-4 md:flex-row md:items-end md:justify-between">
             <h2 className="reveal max-w-2xl font-display text-display-md font-semibold leading-[1.05] text-cream">
               {t.products.title}
             </h2>
@@ -309,8 +309,11 @@ export function Products() {
                   data-group
                   className="relative flex shrink-0 items-end gap-8 md:gap-11"
                 >
-                  {/* group index chip */}
-                  <span className="eyebrow absolute -top-9 left-1 text-[0.62rem] text-apricot/75">
+                  {/* group index chip — etched into the shadow under the plank */}
+                  <span
+                    className="eyebrow absolute left-1 whitespace-nowrap text-[0.62rem] text-apricot/75"
+                    style={{ bottom: -52 }}
+                  >
                     {String(gi + 1).padStart(2, "0")} · {t.products.cats[cat]}
                   </span>
 
