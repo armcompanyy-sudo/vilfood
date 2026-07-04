@@ -96,25 +96,6 @@ export function Products() {
       });
       stRef.current = (tween.scrollTrigger as ST) ?? null;
 
-      // giant category names drift slower than the jars — cheap depth
-      track.querySelectorAll<HTMLElement>("[data-shelf-label]").forEach((el) => {
-        gsap.fromTo(
-          el,
-          { xPercent: 6 },
-          {
-            xPercent: -6,
-            ease: "none",
-            scrollTrigger: {
-              containerAnimation: tween,
-              trigger: el,
-              start: "left right",
-              end: "right left",
-              scrub: true,
-            },
-          },
-        );
-      });
-
       // jars settle onto the plank as they enter from the right
       track.querySelectorAll<HTMLElement>("[data-jar]").forEach((el) => {
         gsap.from(el, {
@@ -313,7 +294,7 @@ export function Products() {
             onPointerCancel={onPointerUp}
             className={`relative z-10 h-full select-none ${
               enhanced
-                ? "overflow-hidden cursor-grab active:cursor-grabbing"
+                ? "overflow-visible cursor-grab active:cursor-grabbing"
                 : "no-scrollbar overflow-x-auto overflow-y-hidden"
             }`}
           >
@@ -326,17 +307,8 @@ export function Products() {
                 <div
                   key={cat}
                   data-group
-                  className="relative flex shrink-0 items-end gap-6 pr-8 md:gap-10 md:pr-24"
+                  className="relative flex shrink-0 items-end gap-8 md:gap-11"
                 >
-                  {/* giant category name behind the jars */}
-                  <span
-                    aria-hidden
-                    data-shelf-label
-                    className="pointer-events-none absolute -left-2 select-none whitespace-nowrap font-display italic font-semibold leading-none text-cream/[0.07] text-[clamp(4.5rem,9vw,8.5rem)]"
-                    style={{ bottom: BASELINE + 30 }}
-                  >
-                    {t.products.cats[cat]}
-                  </span>
                   {/* group index chip */}
                   <span className="eyebrow absolute -top-9 left-1 text-[0.62rem] text-apricot/75">
                     {String(gi + 1).padStart(2, "0")} · {t.products.cats[cat]}
