@@ -56,6 +56,26 @@ export function Products() {
     return () => mq.removeEventListener("change", update);
   }, []);
 
+  /* ---- fit the jars to the viewport height (desktop) ----
+     The stage is exactly one screen tall; on short windows the fixed-height
+     jars would push the tabs row out of the section. Scale them instead. */
+  useEffect(() => {
+    const track = trackRef.current;
+    if (!track) return;
+    const apply = () => {
+      if (!window.matchMedia("(min-width: 768px)").matches) {
+        track.style.removeProperty("--jar-scale");
+        return;
+      }
+      const h = window.innerHeight;
+      const s = h < 720 ? 0.7 : h < 800 ? 0.82 : h < 880 ? 0.9 : 1;
+      track.style.setProperty("--jar-scale", String(s));
+    };
+    apply();
+    window.addEventListener("resize", apply);
+    return () => window.removeEventListener("resize", apply);
+  }, [enhanced]);
+
   /* ---- pinned horizontal scroll (desktop) ---- */
   useEffect(() => {
     if (!enhanced) return;
@@ -261,7 +281,7 @@ export function Products() {
         </div>
 
         {/* shelf */}
-        <div className="relative mt-6 h-[420px] md:mt-0 md:h-auto md:flex-1">
+        <div className="relative mt-6 h-[420px] md:mt-0 md:h-auto md:min-h-0 md:flex-1">
           {/* plank — fixed in the stage; the jars glide along it */}
           <div
             aria-hidden
@@ -352,7 +372,7 @@ export function Products() {
         </div>
 
         {/* tabs + progress */}
-        <div className="mx-auto w-full max-w-[1320px] px-5 pb-9 pt-5 sm:px-8 md:pb-10">
+        <div className="mx-auto w-full max-w-[1320px] px-5 pb-6 pt-4 sm:px-8 md:pb-7">
           <div className="flex flex-wrap items-center justify-between gap-4">
             <div className="flex flex-wrap gap-2">
               {GROUPS.map(({ cat }, i) => (
