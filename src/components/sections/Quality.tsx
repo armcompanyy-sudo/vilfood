@@ -10,7 +10,7 @@ export function Quality() {
     <section
       id="quality"
       ref={ref}
-      className="relative overflow-hidden bg-ink py-28 text-cream md:py-36"
+      className="relative overflow-hidden bg-ink py-24 text-cream md:py-36"
     >
       {/* warm sun-glow */}
       <div

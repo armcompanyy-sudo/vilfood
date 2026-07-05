@@ -32,16 +32,12 @@ export function WhereToBuy() {
         <ul className="reveal mt-16 grid grid-cols-2 gap-px overflow-hidden rounded-jar border border-ink/10 bg-ink/10 sm:grid-cols-3 lg:grid-cols-4">
           {RETAILERS.map((name) => (
             <li key={name}>
-              <a
-                href="#find"
-                onClick={(e) => e.preventDefault()}
-                className="group flex h-28 items-center justify-center bg-cream transition-colors duration-300 hover:bg-cream-deep md:h-32"
-                aria-label={`${name} — ${t.a11y.stockist}`}
-              >
+              {/* wordmark tile — decorative until real logos link out */}
+              <div className="group flex h-28 items-center justify-center bg-cream transition-colors duration-300 hover:bg-cream-deep md:h-32">
                 <span className="font-display text-2xl font-semibold tracking-tight text-ink/35 transition-colors duration-300 group-hover:text-pomegranate md:text-3xl">
                   {name}
                 </span>
-              </a>
+              </div>
             </li>
           ))}
           {/* trailing CTA cell */}

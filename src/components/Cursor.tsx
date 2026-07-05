@@ -61,7 +61,7 @@ export function Cursor() {
     <div
       ref={dot}
       aria-hidden
-      className="pointer-events-none fixed left-0 top-0 z-[70] h-3 w-3 rounded-full opacity-0"
+      className="pointer-events-none fixed left-0 top-0 z-[90] h-3 w-3 rounded-full opacity-0"
       style={{ backgroundColor: "rgba(142,36,52,0.9)", mixBlendMode: "multiply" }}
     />
   );

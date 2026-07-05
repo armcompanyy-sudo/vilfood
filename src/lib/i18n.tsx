@@ -52,7 +52,6 @@ export interface Dict {
     menuClose: string;
     heroImage: string;
     footerNav: string;
-    stockist: string;
     close: string;
   };
   nav: {
@@ -71,7 +70,6 @@ export interface Dict {
     sub: string;
     cta1: string;
     cta2: string;
-    scroll: string;
     badge: string;
   };
   story: {
@@ -88,7 +86,6 @@ export interface Dict {
     unit: string;
     hint: string;
     cats: {
-      all: string;
       sauces: string;
       spreads: string;
       pickles: string;
@@ -157,7 +154,6 @@ const en: Dict = {
     heroImage:
       "Vilfood preserves set in an Armenian mountain landscape with poppies, pomegranates and a hilltop church",
     footerNav: "Footer",
-    stockist: "stockist",
     close: "Close",
   },
   nav: {
@@ -176,7 +172,6 @@ const en: Dict = {
     sub: "Natural Armenian fruit & vegetable preserves — orchard-ripe, jarred the traditional way, on tables from Hrazdan to Moscow since 2007.",
     cta1: "Explore the harvest",
     cta2: "Where to buy",
-    scroll: "Scroll",
     badge: "Est. 2007 · Kotayk",
   },
   story: {
@@ -197,7 +192,6 @@ const en: Dict = {
     unit: "ml",
     hint: "Drag the shelf — or just keep scrolling",
     cats: {
-      all: "All",
       sauces: "Tomatoes & Sauces",
       spreads: "Spreads & Salads",
       pickles: "Pickles & Marinades",
@@ -287,7 +281,6 @@ const ru: DeepPartial<Dict> = {
     heroImage:
       "Заготовки Vilfood на фоне армянского горного пейзажа с маками, гранатами и церковью на холме",
     footerNav: "Нижнее меню",
-    stockist: "точка продаж",
     close: "Закрыть",
   },
   nav: {
@@ -306,7 +299,6 @@ const ru: DeepPartial<Dict> = {
     sub: "Натуральные армянские фруктовые и овощные заготовки — спелые, закрытые по-домашнему. На столах от Раздана до Москвы с 2007 года.",
     cta1: "Смотреть урожай",
     cta2: "Где купить",
-    scroll: "Листайте",
     badge: "Осн. 2007 · Котайк",
   },
   story: {
@@ -317,7 +309,7 @@ const ru: DeepPartial<Dict> = {
     stats: [
       { n: "2007", l: "Основан в Раздане" },
       { n: "4", l: "Линейки продукции" },
-      { n: "7", l: "Торговых партнёра" },
+      { n: "7", l: "Торговых партнёров" },
     ],
   },
   products: {
@@ -327,7 +319,6 @@ const ru: DeepPartial<Dict> = {
     unit: "мл",
     hint: "Тяните полку — или просто листайте",
     cats: {
-      all: "Все",
       sauces: "Томаты и соусы",
       spreads: "Закуски и салаты",
       pickles: "Соленья и маринады",
@@ -417,7 +408,6 @@ const hy: DeepPartial<Dict> = {
     heroImage:
       "Vilfood-ի պահածոները հայկական լեռնային բնապատկերի ֆոնին՝ կակաչներով, նռներով և բլրի վրա կանգնած եկեղեցով",
     footerNav: "Ստորին ընտրացանկ",
-    stockist: "վաճառակետ",
     close: "Փակել",
   },
   nav: {
@@ -436,7 +426,6 @@ const hy: DeepPartial<Dict> = {
     sub: "Բնական հայկական մրգային և բանջարեղենային պահածոներ՝ այգու հասունությամբ, ավանդական ձևով փակված։ Հրազդանից Մոսկվա՝ 2007-ից։",
     cta1: "Տեսնել բերքը",
     cta2: "Որտեղ գնել",
-    scroll: "Ոլորել",
     badge: "Հիմն. 2007 · Կոտայք",
   },
   story: {
@@ -457,7 +446,6 @@ const hy: DeepPartial<Dict> = {
     unit: "մլ",
     hint: "Քաշեք դարակը կամ պարզապես ոլորեք",
     cats: {
-      all: "Բոլորը",
       sauces: "Տոմատ և սոուս",
       spreads: "Նախուտեստ և աղցան",
       pickles: "Թթու և մարինադ",

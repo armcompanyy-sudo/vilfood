@@ -464,7 +464,29 @@ function JarOverlay({ p, onClose }: { p: CatalogueProduct; onClose: () => void }
     const lenis = getLenis();
     lenis?.stop();
     document.body.style.overflow = "hidden";
-    const onKey = (e: KeyboardEvent) => e.key === "Escape" && closeFn.current();
+    const onKey = (e: KeyboardEvent) => {
+      if (e.key === "Escape") {
+        closeFn.current();
+        return;
+      }
+      // keep Tab cycling inside the dialog
+      if (e.key === "Tab" && rootRef.current) {
+        const focusables = Array.from(
+          rootRef.current.querySelectorAll<HTMLElement>("button, a[href]"),
+        ).filter((el) => el.offsetParent !== null);
+        if (!focusables.length) return;
+        const first = focusables[0];
+        const last = focusables[focusables.length - 1];
+        const active = document.activeElement as HTMLElement | null;
+        if (e.shiftKey && (active === first || !rootRef.current.contains(active))) {
+          e.preventDefault();
+          last.focus();
+        } else if (!e.shiftKey && (active === last || !rootRef.current.contains(active))) {
+          e.preventDefault();
+          first.focus();
+        }
+      }
+    };
     window.addEventListener("keydown", onKey);
 
     const ctx = gsap.context(() => {

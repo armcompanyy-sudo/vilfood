@@ -117,8 +117,8 @@
   .no-scrollbar::-webkit-scrollbar {
     display: none;
   }
-  /* Reveal primitive — elements start hidden, GSAP lifts them in.
-     If JS/GSAP never runs, a fallback below makes them visible. */
+  /* Reveal primitive — elements start hidden, GSAP lifts them in
+     (reduced-motion override below shows them untouched). */
   .reveal {
     opacity: 0;
     transform: translateY(28px);
@@ -153,12 +153,7 @@ html[lang="hy"] .text-display-sm {
   }
 }
 
-/* ---- Graceful degradation: no JS, or reduced motion ---- */
-.no-js .reveal {
-  opacity: 1;
-  transform: none;
-}
-
+/* ---- Reduced motion ---- */
 @media (prefers-reduced-motion: reduce) {
   .reveal {
     opacity: 1 !important;

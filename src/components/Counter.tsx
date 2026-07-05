@@ -1,4 +1,4 @@
-import { useEffect, useRef } from "react";
+import { useLayoutEffect, useRef } from "react";
 import { gsap, ScrollTrigger, prefersReducedMotion } from "../lib/motion";
 
 /** A number that counts up once when scrolled into view. */
@@ -13,7 +13,7 @@ export function Counter({
 }) {
   const ref = useRef<HTMLSpanElement>(null);
 
-  useEffect(() => {
+  useLayoutEffect(() => {
     const el = ref.current;
     if (!el) return;
     if (prefersReducedMotion()) {

@@ -121,6 +121,7 @@ export function Contact() {
                 </label>
                 <input
                   id="c-name"
+                  name="name"
                   type="text"
                   autoComplete="name"
                   value={values.name}
@@ -142,6 +143,7 @@ export function Contact() {
                 </label>
                 <input
                   id="c-email"
+                  name="email"
                   type="email"
                   autoComplete="email"
                   value={values.email}
@@ -163,6 +165,7 @@ export function Contact() {
                 </label>
                 <textarea
                   id="c-msg"
+                  name="message"
                   rows={4}
                   value={values.message}
                   onChange={set("message")}
