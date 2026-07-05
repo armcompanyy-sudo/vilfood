@@ -31,6 +31,17 @@ const GROUPS = PRODUCT_CATEGORIES.map((cat) => ({
   items: PRODUCTS.filter((p) => p.category === cat),
 }));
 
+/* Dust motes for the cellar lamplight — deterministic pseudo-random spread. */
+const MOTES = Array.from({ length: 14 }, (_, i) => ({
+  left: ((i * 7.3 + 5) % 88) + 4,
+  bottom: 88 + ((i * 37) % 190),
+  size: i % 3 === 0 ? 3 : 2,
+  mx: ((i % 5) - 2) * 12,
+  mo: 0.1 + (i % 4) * 0.05,
+  dur: 9 + ((i * 2.3) % 8),
+  delay: (i * 1.7) % 12,
+}));
+
 export function Products() {
   const { t, locale } = useI18n();
   const headerRef = useScrollReveal<HTMLDivElement>();
@@ -92,6 +103,17 @@ export function Products() {
     const groups = Array.from(track.querySelectorAll<HTMLElement>("[data-group]"));
     const dist = () => Math.max(1, track.scrollWidth - viewport.clientWidth);
 
+    // momentum lean: the jars tip into the motion like real objects on a
+    // moving shelf, then settle upright when the scroll comes to rest
+    gsap.set(track, { transformOrigin: "50% 100%" });
+    const leanTo = gsap.quickTo(track, "skewX", { duration: 0.55, ease: "power2.out" });
+    let leanIdle = 0;
+    const lean = (velocity: number) => {
+      leanTo(gsap.utils.clamp(-5, 5, -velocity / 450));
+      window.clearTimeout(leanIdle);
+      leanIdle = window.setTimeout(() => leanTo(0), 140);
+    };
+
     const ctx = gsap.context(() => {
       const tween = gsap.to(track, {
         x: () => -dist(),
@@ -107,6 +129,7 @@ export function Products() {
           onUpdate(self) {
             if (progressRef.current)
               gsap.set(progressRef.current, { scaleX: self.progress });
+            lean(self.getVelocity());
             const x = self.progress * dist();
             let idx = 0;
             groups.forEach((g, i) => {
@@ -146,6 +169,8 @@ export function Products() {
     imgs.forEach((i) => !i.complete && i.addEventListener("load", onLoad, { once: true }));
 
     return () => {
+      window.clearTimeout(leanIdle);
+      gsap.set(track, { skewX: 0 });
       ctx.revert();
       stRef.current = null;
       imgs.forEach((i) => i.removeEventListener("load", onLoad));
@@ -159,7 +184,27 @@ export function Products() {
     const track = trackRef.current;
     if (!viewport || !track) return;
     const groups = Array.from(track.querySelectorAll<HTMLElement>("[data-group]"));
+
+    // same momentum lean as the pinned shelf, fed by native scroll velocity
+    const motion = !prefersReducedMotion();
+    if (motion) gsap.set(track, { transformOrigin: "50% 100%" });
+    const leanTo = motion
+      ? gsap.quickTo(track, "skewX", { duration: 0.5, ease: "power2.out" })
+      : null;
+    let lastL = viewport.scrollLeft;
+    let lastT = performance.now();
+    let leanIdle = 0;
+
     const onScroll = () => {
+      if (leanTo) {
+        const now = performance.now();
+        const v = ((viewport.scrollLeft - lastL) / Math.max(1, now - lastT)) * 1000;
+        lastL = viewport.scrollLeft;
+        lastT = now;
+        leanTo(gsap.utils.clamp(-4, 4, -v / 500));
+        window.clearTimeout(leanIdle);
+        leanIdle = window.setTimeout(() => leanTo(0), 140);
+      }
       let idx = 0;
       groups.forEach((g, i) => {
         if (g.offsetLeft - 90 <= viewport.scrollLeft) idx = i;
@@ -170,7 +215,11 @@ export function Products() {
       }
     };
     viewport.addEventListener("scroll", onScroll, { passive: true });
-    return () => viewport.removeEventListener("scroll", onScroll);
+    return () => {
+      window.clearTimeout(leanIdle);
+      gsap.set(track, { skewX: 0 });
+      viewport.removeEventListener("scroll", onScroll);
+    };
   }, [enhanced]);
 
   /* ---- category tabs jump along the shelf ---- */
@@ -257,12 +306,14 @@ export function Products() {
             "radial-gradient(120% 90% at 50% 0%, #2E241B 0%, #241B13 55%, #1D150E 100%)",
         }}
       />
+      {/* the lamp breathes — a slow, living pulse over the shelf */}
       <div
         aria-hidden
         className="pointer-events-none absolute inset-0"
         style={{
           background:
             "radial-gradient(55% 45% at 50% 46%, rgba(232,161,75,0.11), transparent 70%)",
+          animation: "spot-breathe 7s ease-in-out infinite",
         }}
       />
 
@@ -287,6 +338,38 @@ export function Products() {
 
         {/* shelf */}
         <div className="relative mt-6 h-[420px] md:mt-0 md:h-auto md:min-h-0 md:flex-1">
+          {/* dust motes drifting up through the lamplight */}
+          <div aria-hidden className="pointer-events-none absolute inset-0 z-[5] overflow-hidden">
+            {MOTES.map((m, i) => (
+              <span
+                key={i}
+                className="absolute rounded-full bg-apricot-glow"
+                style={{
+                  left: `${m.left}%`,
+                  bottom: m.bottom,
+                  width: m.size,
+                  height: m.size,
+                  opacity: 0,
+                  filter: "blur(0.5px)",
+                  ["--mx" as string]: `${m.mx}px`,
+                  ["--mo" as string]: m.mo,
+                  animation: `mote-float ${m.dur}s linear ${m.delay}s infinite`,
+                }}
+              />
+            ))}
+          </div>
+          {/* a soft band of light sweeps across the glass now and then */}
+          <div
+            aria-hidden
+            className="pointer-events-none absolute inset-y-0 z-20 w-[26%]"
+            style={{
+              left: "-30%",
+              background:
+                "linear-gradient(100deg, transparent 0%, rgba(255,233,200,0.06) 40%, rgba(255,233,200,0.12) 50%, rgba(255,233,200,0.06) 60%, transparent 100%)",
+              mixBlendMode: "screen",
+              animation: "shelf-sweep 11s ease-in-out infinite",
+            }}
+          />
           {/* plank — fixed in the stage; the jars glide along it */}
           <div
             aria-hidden
