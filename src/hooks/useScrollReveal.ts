@@ -22,17 +22,22 @@ export function useScrollReveal<T extends HTMLElement>() {
     }
 
     const ctx = gsap.context(() => {
+      const show = (batch: Element[]) =>
+        gsap.to(batch, {
+          opacity: 1,
+          y: 0,
+          duration: 1.1,
+          ease: EASE,
+          stagger: 0.09,
+          overwrite: true,
+        });
+      // both directions — entering from below AND scrolling back up must
+      // reveal; onEnter alone left content permanently invisible when a
+      // section was first reached bottom-up
       ScrollTrigger.batch(items, {
         start: "top 86%",
-        onEnter: (batch) =>
-          gsap.to(batch, {
-            opacity: 1,
-            y: 0,
-            duration: 1.1,
-            ease: EASE,
-            stagger: 0.09,
-            overwrite: true,
-          }),
+        onEnter: show,
+        onEnterBack: show,
       });
     }, root);
 
