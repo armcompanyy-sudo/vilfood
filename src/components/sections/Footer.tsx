@@ -22,9 +22,9 @@ export function Footer() {
       />
       <div className="mx-auto max-w-[1320px] px-5 sm:px-8">
         {/* closing line */}
-        <p data-ink="cream" className="max-w-3xl font-display text-display-sm font-semibold leading-[1.08] text-cream">
-          {t.footer.tagline}
-        </p>
+        <p className="max-w-3xl font-display text-display-sm font-semibold leading-[1.08] text-cream">
+            <span data-ink="cream">{t.footer.tagline}</span>
+          </p>
 
         <div className="mt-16 flex flex-col gap-10 border-t border-cream/12 pt-10 md:flex-row md:items-start md:justify-between">
           <div className="max-w-xs">

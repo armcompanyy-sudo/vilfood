@@ -154,6 +154,10 @@ html[lang="hy"] .text-display-sm {
    changes — layout, sizes and line breaks stay identical in every locale. */
 [data-ink] {
   --ink-c: 35, 28, 22; /* ink */
+  /* applied to an inline <span>: vertical padding on inline boxes paints the
+     background taller WITHOUT affecting line height or layout — it keeps
+     ascenders/descenders (y, j, Armenian tails) inside the painted area */
+  padding: 0.3em 0;
   background-image: linear-gradient(
     100deg,
     rgb(var(--ink-c)) 46%,
