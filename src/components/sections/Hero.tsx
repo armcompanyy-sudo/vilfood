@@ -23,7 +23,7 @@ function HeroCopy() {
       {/* Each line is masked (overflow-hidden) for the slide-up reveal. The
           pb/-mb pair extends the clip box below the tight 0.9 line-height so
           descenders + commas aren't sliced, with no change to composition. */}
-      <h1 data-hero-title className={`font-display ${titleSize} font-semibold text-ink`}>
+      <h1 className={`font-display ${titleSize} font-semibold text-ink`}>
         <span className="block overflow-hidden pb-[0.2em] -mb-[0.2em]">
           <span data-hero-line className="block">
             {t.hero.titleA}
@@ -90,13 +90,6 @@ export function Hero() {
       gsap.set("[data-hero-line]", { yPercent: 130 });
       const tl = gsap.timeline({ delay: 0.15, defaults: { ease } });
       tl.to("[data-hero-line]", { yPercent: 0, duration: 1.1 * k, stagger: 0.12 * k })
-        // Fraunces "ripens" as the headline lands: soft & light -> crisp semibold
-        .fromTo(
-          "[data-hero-title]",
-          { fontVariationSettings: '"wght" 430, "SOFT" 100' },
-          { fontVariationSettings: '"wght" 600, "SOFT" 0', duration: 1.7 * k, ease: "power2.inOut" },
-          0.1,
-        )
         .from("[data-hero-eyebrow]", { opacity: 0, y: 16, duration: 0.8 * k }, 0.2 * k)
         .from("[data-hero-sub]", { opacity: 0, y: 20, duration: 0.9 * k }, 0.5 * k)
         .from("[data-hero-cta]", { opacity: 0, y: 20, duration: 0.8 * k, stagger: 0.1 * k }, 0.7 * k);

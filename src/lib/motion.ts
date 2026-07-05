@@ -1,8 +1,7 @@
 import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
-import { SplitText } from "gsap/SplitText";
 
-gsap.registerPlugin(ScrollTrigger, SplitText);
+gsap.registerPlugin(ScrollTrigger);
 
 // Dev-only handle for the preview harness.
 if (import.meta.env.DEV)
@@ -17,4 +16,4 @@ export function prefersReducedMotion(): boolean {
 /** The page's signature easing — slow-out, used everywhere for cohesion. */
 export const EASE = "power3.out";
 
-export { gsap, ScrollTrigger, SplitText };
+export { gsap, ScrollTrigger };

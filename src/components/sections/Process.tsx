@@ -17,7 +17,7 @@ const VISUALS = [
 ];
 
 export function Process() {
-  const { t, locale } = useI18n();
+  const { t } = useI18n();
   const headerRef = useScrollReveal<HTMLDivElement>();
   const stepsRef = useRef<HTMLDivElement>(null);
   const [active, setActive] = useState(0);
@@ -63,7 +63,7 @@ export function Process() {
           <div className="reveal">
             <Eyebrow>{t.process.eyebrow}</Eyebrow>
           </div>
-          <h2 key={locale} data-choreo className="mt-7 max-w-3xl font-display text-display-md font-semibold leading-[1.05] text-ink">
+          <h2 className="reveal mt-7 max-w-3xl font-display text-display-md font-semibold leading-[1.05] text-ink">
             {t.process.title}
           </h2>
           <p className="reveal mt-6 max-w-xl text-pretty text-ink/70 md:text-lg">

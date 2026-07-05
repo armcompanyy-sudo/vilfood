@@ -4,7 +4,7 @@ import { Counter } from "../Counter";
 import { useScrollReveal } from "../../hooks/useScrollReveal";
 
 export function Story() {
-  const { t, locale } = useI18n();
+  const { t } = useI18n();
   const ref = useScrollReveal<HTMLElement>();
 
   return (
@@ -15,7 +15,7 @@ export function Story() {
         </div>
 
         <div className="mt-8 grid gap-10 md:grid-cols-12 md:gap-8">
-          <h2 key={locale} data-choreo className="font-display text-display-md font-semibold leading-[1.05] text-ink md:col-span-7">
+          <h2 className="reveal font-display text-display-md font-semibold leading-[1.05] text-ink md:col-span-7">
             {t.story.title}
           </h2>
 

@@ -126,17 +126,6 @@
   }
 }
 
-/* Choreographed titles stay hidden until SplitText has carved them into
-   masked lines (HeadlineChoreo reveals them; reduced-motion shows them as-is). */
-[data-choreo] {
-  visibility: hidden;
-}
-/* A split line must never rewrap inside its clipped mask — if metrics drift
-   a hair (font swap timing), let it overflow instead of breaking layout. */
-.choreo-line {
-  white-space: nowrap;
-}
-
 /* Armenian headings: the display fonts use tight negative tracking that
    cramps Armenian and shrinks the gaps between words. For hy, reset the
    tracking and add a little word-spacing so words read clearly at every size.

@@ -1,6 +1,5 @@
 import { SmoothScroll } from "./lib/SmoothScroll";
 import { Grain } from "./components/Grain";
-import { HeadlineChoreo } from "./components/HeadlineChoreo";
 import { Cursor } from "./components/Cursor";
 import { ScrollProgress } from "./components/ScrollProgress";
 import { Nav } from "./components/Nav";
@@ -30,7 +29,6 @@ export default function App() {
         <Contact />
       </main>
       <Footer />
-      <HeadlineChoreo />
     </SmoothScroll>
   );
 }
