@@ -126,59 +126,6 @@
   }
 }
 
-/* ---- shelf ambience (Products cellar) ---- */
-/* the lamp breathes */
-@keyframes spot-breathe {
-  0%,
-  100% {
-    opacity: 0.72;
-    transform: scale(1);
-  }
-  50% {
-    opacity: 1;
-    transform: scale(1.05);
-  }
-}
-/* dust drifting up through the light */
-@keyframes mote-float {
-  0% {
-    transform: translate3d(0, 0, 0);
-    opacity: 0;
-  }
-  12% {
-    opacity: var(--mo, 0.2);
-  }
-  82% {
-    opacity: var(--mo, 0.2);
-  }
-  100% {
-    transform: translate3d(var(--mx, 10px), -130px, 0);
-    opacity: 0;
-  }
-}
-/* a band of window-light passing across the jars */
-@keyframes shelf-sweep {
-  0% {
-    transform: translateX(0);
-    opacity: 0;
-  }
-  4% {
-    opacity: 1;
-  }
-  26% {
-    transform: translateX(540%);
-    opacity: 1;
-  }
-  30% {
-    transform: translateX(540%);
-    opacity: 0;
-  }
-  100% {
-    transform: translateX(540%);
-    opacity: 0;
-  }
-}
-
 /* Armenian headings: the display fonts use tight negative tracking that
    cramps Armenian and shrinks the gaps between words. For hy, reset the
    tracking and add a little word-spacing so words read clearly at every size.
