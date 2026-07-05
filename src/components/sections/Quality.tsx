@@ -23,7 +23,9 @@ export function Quality() {
       />
 
       {/* wavy edges — layered cream waves lap over the ink like syrup */}
-      {["top-0", "bottom-0 rotate-180"].map((pos) => (
+      {/* -top/bottom-px: overlap the seam so the ink can never peek through
+          a fractional-pixel gap above/below the divider */}
+      {["-top-px", "-bottom-px rotate-180"].map((pos) => (
         <svg
           key={pos}
           aria-hidden

@@ -41,7 +41,7 @@ export function Nav() {
     <header
       className={`fixed inset-x-0 top-0 z-50 transition-all duration-500 ease-editorial ${
         scrolled || open
-          ? "border-b border-ink/10 bg-cream/80 backdrop-blur-md"
+          ? "border-b border-transparent bg-cream/80 backdrop-blur-md"
           : "border-b border-transparent bg-transparent"
       }`}
     >
