@@ -134,6 +134,15 @@ html[lang="hy"] :is(h1, h2, h3) {
   letter-spacing: 0.03em;
   word-spacing: 0.16em;
 }
+/* Armenian display type also runs wide (long, unbreakable words) — step the
+   display sizes down so titles keep to 2-3 lines like their EN/RU
+   counterparts instead of stacking one word per line. */
+html[lang="hy"] .text-display-md {
+  font-size: clamp(1.9rem, 4.4vw, 3.4rem);
+}
+html[lang="hy"] .text-display-sm {
+  font-size: clamp(1.6rem, 3.8vw, 2.6rem);
+}
 
 /* Custom cursor: hide native only where a fine pointer can hover */
 @media (hover: hover) and (pointer: fine) {
