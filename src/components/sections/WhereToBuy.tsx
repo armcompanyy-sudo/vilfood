@@ -19,7 +19,7 @@ export function WhereToBuy() {
             <div className="reveal">
               <Eyebrow>{t.find.eyebrow}</Eyebrow>
             </div>
-            <h2 className="reveal mt-7 max-w-2xl font-display text-display-md font-semibold leading-[1.05] text-ink">
+            <h2 data-ink className="mt-7 max-w-2xl font-display text-display-md font-semibold leading-[1.05] text-ink">
               {t.find.title}
             </h2>
           </div>

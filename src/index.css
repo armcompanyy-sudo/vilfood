@@ -148,6 +148,33 @@ html[lang="hy"] .text-display-sm {
   font-size: clamp(1.6rem, 3.8vw, 2.6rem);
 }
 
+/* ---- Ink-fill titles ----
+   Display titles render through a gradient clipped to the glyphs and "fill"
+   with ink as they scrub into view. Paint-only: no DOM changes, no metric
+   changes — layout, sizes and line breaks stay identical in every locale. */
+[data-ink] {
+  --ink-c: 35, 28, 22; /* ink */
+  background-image: linear-gradient(
+    100deg,
+    rgb(var(--ink-c)) 46%,
+    rgba(var(--ink-c), 0.16) 54%
+  );
+  background-size: 250% 100%;
+  background-position: 100% 0;
+  background-repeat: no-repeat;
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+[data-ink="cream"] {
+  --ink-c: 244, 237, 225; /* cream, for dark sections */
+}
+@media (prefers-reduced-motion: reduce) {
+  [data-ink] {
+    background-position: 0 0 !important;
+  }
+}
+
 /* Custom cursor: hide native only where a fine pointer can hover */
 @media (hover: hover) and (pointer: fine) {
   .has-custom-cursor,

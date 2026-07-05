@@ -63,7 +63,7 @@ export function Process() {
           <div className="reveal">
             <Eyebrow>{t.process.eyebrow}</Eyebrow>
           </div>
-          <h2 className="reveal mt-7 max-w-3xl font-display text-display-md font-semibold leading-[1.05] text-ink">
+          <h2 data-ink className="mt-7 max-w-3xl font-display text-display-md font-semibold leading-[1.05] text-ink">
             {t.process.title}
           </h2>
           <p className="reveal mt-6 max-w-xl text-pretty text-ink/70 md:text-lg">

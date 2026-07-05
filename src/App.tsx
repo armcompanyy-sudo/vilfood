@@ -1,5 +1,6 @@
 import { SmoothScroll } from "./lib/SmoothScroll";
 import { Grain } from "./components/Grain";
+import { InkReveal } from "./components/InkReveal";
 import { Cursor } from "./components/Cursor";
 import { ScrollProgress } from "./components/ScrollProgress";
 import { Nav } from "./components/Nav";
@@ -29,6 +30,7 @@ export default function App() {
         <Contact />
       </main>
       <Footer />
+      <InkReveal />
     </SmoothScroll>
   );
 }
