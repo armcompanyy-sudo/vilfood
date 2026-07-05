@@ -26,13 +26,6 @@ export const PRODUCT_CATEGORIES: ProductCategory[] = [
 export const PRODUCTS: CatalogueProduct[] = [
   // ---- Tomatoes & sauces ----
   {
-    id: "tomato-paste",
-    category: "sauces",
-    img: "/img/products/v5/tomato-paste.webp",
-    vol: "250 / 440 / 720 / 900",
-    name: { en: "Tomato Paste", ru: "Томатная паста", hy: "Տոմատի մածուկ" },
-  },
-  {
     id: "tomato-pulp",
     category: "sauces",
     img: "/img/products/v5/tomato-pulp.webp",
