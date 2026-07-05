@@ -10,17 +10,21 @@ import {
 /**
  * Section-title choreography: every `[data-choreo]` element splits into
  * masked lines (SplitText) that rise in with a stagger as it enters the
- * viewport. Splitting waits for webfonts so the measured line breaks match
- * the real metrics, `autoSplit` re-splits on resize, and titles are keyed
- * by locale upstream so language switches re-split fresh copy.
+ * viewport.
  *
- * Deliberately NO font-variation scrubbing here: animating wght/SOFT changes
- * glyph advances, which invalidates the measured line breaks and makes text
- * rewrap inside its clipped masks (the hero headline can ripen safely — its
- * lines are single words that never rewrap).
+ * Line breaks are only valid for the metrics they were measured with, so we
+ * are strict about fonts:
+ *  - the Google Fonts stylesheet loads async (media=print swap), so
+ *    `fonts.ready` can resolve before the display face even starts loading —
+ *    we poll `fonts.check()` for the actual display family (per locale)
+ *    before splitting, with a timeout fallback;
+ *  - if font files land later anyway, `loadingdone` rebuilds the split once
+ *    (debounced), self-healing any measure/render mismatch.
  *
- * Titles are hidden by CSS until the split runs (no unstyled flash);
- * reduced-motion users get them shown immediately, untouched.
+ * Titles are keyed by locale upstream so language switches re-split fresh
+ * copy. No font-variation scrubbing here — animating wght/SOFT changes glyph
+ * advances and rewraps text inside the clipped masks (the hero can ripen
+ * safely: its lines are single words).
  */
 export function HeadlineChoreo() {
   const { locale } = useI18n();
@@ -37,8 +41,24 @@ export function HeadlineChoreo() {
     let cancelled = false;
     let ctx: gsap.Context | null = null;
 
+    // the face that actually renders these titles in the current locale
+    const displayFace =
+      locale === "ru"
+        ? '"Playfair Display"'
+        : locale === "hy"
+          ? '"Noto Serif Armenian"'
+          : '"Fraunces"';
+    const fontUsable = () => {
+      try {
+        return document.fonts.check(`700 24px ${displayFace}`);
+      } catch {
+        return true;
+      }
+    };
+
     const build = () => {
       if (cancelled) return;
+      ctx?.revert();
       ctx = gsap.context(() => {
         els.forEach((el) => {
           SplitText.create(el, {
@@ -70,15 +90,31 @@ export function HeadlineChoreo() {
       ScrollTrigger.refresh();
     };
 
-    // measure lines only with the real display font in place
-    if (document.fonts && document.fonts.status !== "loaded") {
-      document.fonts.ready.then(build);
-    } else {
-      build();
-    }
+    // split only once the display face is truly usable (or after ~5s give up
+    // and split with fallback metrics — the loadingdone rebuild corrects it)
+    let tries = 0;
+    const attempt = () => {
+      if (cancelled) return;
+      if (fontUsable() || tries++ > 50) build();
+      else window.setTimeout(attempt, 100);
+    };
+    if (document.fonts) document.fonts.ready.then(attempt);
+    else attempt();
+
+    // late-arriving font files (async stylesheet, other subsets) → re-split
+    let debounce = 0;
+    const onLoadingDone = () => {
+      window.clearTimeout(debounce);
+      debounce = window.setTimeout(() => {
+        if (!cancelled && ctx) build();
+      }, 150);
+    };
+    document.fonts?.addEventListener("loadingdone", onLoadingDone);
 
     return () => {
       cancelled = true;
+      window.clearTimeout(debounce);
+      document.fonts?.removeEventListener("loadingdone", onLoadingDone);
       ctx?.revert();
     };
   }, [locale]);
