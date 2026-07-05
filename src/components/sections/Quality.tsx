@@ -21,6 +21,27 @@ export function Quality() {
             "radial-gradient(70% 120% at 85% 0%, rgba(232,161,75,0.22), transparent 60%)",
         }}
       />
+
+      {/* wavy edges — the cream neighbours lap over the ink like syrup */}
+      <svg
+        aria-hidden
+        className="absolute inset-x-0 top-0 h-10 w-full text-cream md:h-16"
+        viewBox="0 0 1440 64"
+        preserveAspectRatio="none"
+        fill="currentColor"
+      >
+        <path d="M0,0 L1440,0 L1440,26 C1180,58 1000,6 720,30 C440,54 260,10 0,34 Z" />
+      </svg>
+      <svg
+        aria-hidden
+        className="absolute inset-x-0 bottom-0 h-10 w-full rotate-180 text-cream md:h-16"
+        viewBox="0 0 1440 64"
+        preserveAspectRatio="none"
+        fill="currentColor"
+      >
+        <path d="M0,0 L1440,0 L1440,26 C1180,58 1000,6 720,30 C440,54 260,10 0,34 Z" />
+      </svg>
+
       <div className="relative mx-auto max-w-[1100px] px-5 text-center sm:px-8">
         <div className="reveal flex justify-center">
           <Eyebrow tone="cream">{t.quality.eyebrow}</Eyebrow>
