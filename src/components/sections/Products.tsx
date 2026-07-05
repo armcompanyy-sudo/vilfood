@@ -36,6 +36,7 @@ export function Products() {
   const headerRef = useScrollReveal<HTMLDivElement>();
 
   const sectionRef = useRef<HTMLElement>(null);
+  const shelfAreaRef = useRef<HTMLDivElement>(null);
   const viewportRef = useRef<HTMLDivElement>(null);
   const trackRef = useRef<HTMLDivElement>(null);
   const progressRef = useRef<HTMLDivElement>(null);
@@ -56,20 +57,29 @@ export function Products() {
     return () => mq.removeEventListener("change", update);
   }, []);
 
-  /* ---- fit the jars to the viewport height (desktop) ----
-     The stage is exactly one screen tall; on short windows the fixed-height
-     jars would push the tabs row out of the section. Scale them instead. */
+  /* ---- fit the jars to the shelf area (desktop) ----
+     The stage is exactly one screen tall and the header height varies by
+     locale (RU/HY titles run taller), so scale the jars off the actual
+     space left for the shelf — the tallest jar must always clear the
+     header. A ResizeObserver re-fits on window resizes, locale switches
+     and font swaps alike. */
   useEffect(() => {
     const track = trackRef.current;
-    if (!track) return;
+    const area = shelfAreaRef.current;
+    if (!track || !area) return;
+    const TALLEST = 300; // px, the biggest jarHeight()
+    const AIR = 36; // breathing room above the tallest jar
     const apply = () => {
       if (!window.matchMedia("(min-width: 768px)").matches) {
         track.style.removeProperty("--jar-scale");
         return;
       }
-      const h = window.innerHeight;
-      const s = h < 720 ? 0.7 : h < 800 ? 0.82 : h < 880 ? 0.9 : 1;
-      const next = String(s);
+      const s = gsap.utils.clamp(
+        0.55,
+        1,
+        (area.clientHeight - BASELINE - AIR) / TALLEST,
+      );
+      const next = String(Math.round(s * 100) / 100);
       if (track.style.getPropertyValue("--jar-scale") !== next) {
         track.style.setProperty("--jar-scale", next);
         // the track just changed width — remeasure the scrub distance
@@ -77,8 +87,13 @@ export function Products() {
       }
     };
     apply();
+    const ro = new ResizeObserver(apply);
+    ro.observe(area);
     window.addEventListener("resize", apply);
-    return () => window.removeEventListener("resize", apply);
+    return () => {
+      ro.disconnect();
+      window.removeEventListener("resize", apply);
+    };
   }, [enhanced]);
 
   /* ---- pinned horizontal scroll (desktop) ---- */
@@ -270,7 +285,7 @@ export function Products() {
         {/* header */}
         <div
           ref={headerRef}
-          className="mx-auto w-full max-w-[1320px] px-5 pt-24 sm:px-8 md:pt-[5.5rem]"
+          className="relative z-20 mx-auto w-full max-w-[1320px] px-5 pt-24 sm:px-8 md:pt-[5.5rem]"
         >
           <div className="reveal">
             <Eyebrow>{t.products.eyebrow}</Eyebrow>
@@ -286,7 +301,10 @@ export function Products() {
         </div>
 
         {/* shelf */}
-        <div className="relative mt-6 h-[420px] md:mt-0 md:h-auto md:min-h-0 md:flex-1">
+        <div
+          ref={shelfAreaRef}
+          className="relative mt-6 h-[420px] md:mt-0 md:h-auto md:min-h-0 md:flex-1"
+        >
           {/* plank — fixed in the stage; the jars glide along it */}
           <div
             aria-hidden
