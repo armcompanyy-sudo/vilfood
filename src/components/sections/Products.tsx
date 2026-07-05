@@ -442,7 +442,6 @@ export function Products() {
 function JarOverlay({ p, onClose }: { p: CatalogueProduct; onClose: () => void }) {
   const { t, locale } = useI18n();
   const rootRef = useRef<HTMLDivElement>(null);
-  const closeRef = useRef<HTMLButtonElement>(null);
   const tlRef = useRef<gsap.core.Timeline | null>(null);
   const closingRef = useRef(false);
 
@@ -496,7 +495,7 @@ function JarOverlay({ p, onClose }: { p: CatalogueProduct; onClose: () => void }
         .from("[data-ov-item]", { y: 24, opacity: 0, stagger: 0.07, duration: 0.55 }, 0.2);
       tlRef.current = tl;
     }, rootRef);
-    closeRef.current?.focus();
+    rootRef.current?.focus();
 
     return () => {
       ctx.revert();
@@ -517,6 +516,7 @@ function JarOverlay({ p, onClose }: { p: CatalogueProduct; onClose: () => void }
   return (
     <div
       ref={rootRef}
+      tabIndex={-1}
       role="dialog"
       aria-modal="true"
       aria-label={p.name[locale]}
@@ -577,15 +577,6 @@ function JarOverlay({ p, onClose }: { p: CatalogueProduct; onClose: () => void }
           </div>
         </div>
       </div>
-      <button
-        ref={closeRef}
-        type="button"
-        onClick={close}
-        aria-label={t.a11y.close}
-        className="absolute right-5 top-5 z-10 flex h-11 w-11 items-center justify-center rounded-full border border-cream/25 text-cream transition-colors duration-300 hover:border-cream/70"
-      >
-        <span aria-hidden>✕</span>
-      </button>
     </div>
   );
 }
