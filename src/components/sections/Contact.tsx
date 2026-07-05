@@ -64,9 +64,7 @@ export function Contact() {
           <div className="reveal">
             <Eyebrow>{t.contact.eyebrow}</Eyebrow>
           </div>
-          <h2 className="mt-7 font-display text-display-md font-semibold leading-[1.05] text-ink">
-            <span data-ink>{t.contact.title}</span>
-          </h2>
+          <h2 className="reveal mt-7 font-display text-display-md font-semibold leading-[1.05] text-ink">{t.contact.title}</h2>
           <p className="reveal mt-6 max-w-md text-pretty text-ink/70 md:text-lg">
             {t.contact.lede}
           </p>
