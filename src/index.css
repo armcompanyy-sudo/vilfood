@@ -133,12 +133,16 @@
 html[lang="hy"] :is(h1, h2, h3) {
   letter-spacing: 0.03em;
   word-spacing: 0.16em;
+  /* `balance` + long unbreakable Armenian words produces orphan one-word
+     lines; greedy wrapping + the non-breaking spaces baked into the HY copy
+     gives tidy, predictable breaks instead. */
+  text-wrap: normal;
 }
 /* Armenian display type also runs wide (long, unbreakable words) — step the
    display sizes down so titles keep to 2-3 lines like their EN/RU
    counterparts instead of stacking one word per line. */
 html[lang="hy"] .text-display-md {
-  font-size: clamp(1.9rem, 4.4vw, 3.4rem);
+  font-size: clamp(1.9rem, 4.2vw, 3rem);
 }
 html[lang="hy"] .text-display-sm {
   font-size: clamp(1.6rem, 3.8vw, 2.6rem);
