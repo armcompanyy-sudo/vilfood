@@ -29,7 +29,9 @@ import { prefersReducedMotion } from "../../lib/motion";
 const PEEK = 24;
 
 const CARDS = [
-  { img: "/img/process/harvest-poster.webp", num: "01", tilt: -0.6, from: "#A15907", to: "#8B4D06" },
+  // from = the video's right/bottom edge colour as the browser actually
+  // renders it (canvas-sampled; codec colour-space shifts the webp values)
+  { img: "/img/process/harvest-poster.webp", num: "01", tilt: -0.6, from: "#AD6009", to: "#955308" },
   { img: "/img/process/cherry.webp", num: "02", tilt: 0.5, from: "#711B22", to: "#61171E" },
   { img: "/img/process/plum.webp", num: "03", tilt: -0.4, from: "#4C2132", to: "#411C2B" },
   { img: "/img/process/grape.webp", num: "04", tilt: 0.6, from: "#3C4821", to: "#343D1C" },
@@ -164,6 +166,22 @@ export function Process() {
                         decoding="async"
                         className="h-full w-full object-cover"
                       />
+                    )}
+                    {i === 0 && (
+                      <>
+                        {/* feather the video edge into the panel colour so the
+                            two halves read as one printed sheet */}
+                        <span
+                          aria-hidden
+                          className="absolute inset-y-0 right-0 hidden w-24 md:block"
+                          style={{ background: `linear-gradient(90deg, rgba(173,96,9,0) 0%, ${c.from} 100%)` }}
+                        />
+                        <span
+                          aria-hidden
+                          className="absolute inset-x-0 bottom-0 h-16 md:hidden"
+                          style={{ background: `linear-gradient(180deg, rgba(173,96,9,0) 0%, ${c.from} 100%)` }}
+                        />
+                      </>
                     )}
                     <span
                       aria-hidden
