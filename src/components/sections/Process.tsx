@@ -191,7 +191,7 @@ export function Process() {
                         playsInline
                         preload="metadata"
                         aria-hidden
-                        className="absolute inset-0 h-full w-full object-cover object-right [transform-origin:100%_50%] [transform:scale(2)] md:[transform:none]"
+                        className="absolute -inset-px h-[calc(100%+2px)] w-[calc(100%+2px)] object-cover object-right [transform-origin:100%_50%] [transform:scale(2)] md:[transform:scale(1.45)]"
                       />
                     )}
                     <div className="relative">
