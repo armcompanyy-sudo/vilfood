@@ -10,14 +10,20 @@ import { prefersReducedMotion } from "../../lib/motion";
  * the viewport while the next one rides in and covers it (native scroll,
  * no pinning). The wrappers must be the sticky elements themselves — a
  * sticky card inside its own wrapper gets carried away with it and the
- * cards never overlap. A light rAF scroll layer adds the hand-made feel:
- * cards arrive with a slight tilt that straightens as they dock, and
- * covered cards sink back (scale + dim).
+ * cards never overlap. Each card docks PEEK px lower than the previous
+ * one, so the top edge of every covered card stays visible above the
+ * current one — the deck reads as a physical stack. A light rAF scroll
+ * layer adds the hand-made feel: cards arrive with a slight tilt that
+ * straightens as they dock, and covered cards sink back (scale + dim,
+ * origin-top so the shrink never swallows the peeking edge).
  *
  * One fruit per step, lithograph artwork on the card's own deep colour;
  * the text panel's gradient starts at the artwork's edge colour so the
  * two halves read as one printed card.
  */
+/** How much of each covered card's top edge stays visible, px. */
+const PEEK = 16;
+
 const CARDS = [
   { img: "/img/process/apricot.webp", num: "01", tilt: -0.6, from: "#AC6315", to: "#945512" },
   { img: "/img/process/cherry.webp", num: "02", tilt: 0.5, from: "#711B22", to: "#61171E" },
@@ -44,14 +50,16 @@ export function Process() {
         const card = cards[i];
         if (!card) return;
         // arriving: the hand-placed tilt straightens as the card docks
-        const top = wrap.getBoundingClientRect().top;
+        // (a stuck wrap rests at its PEEK offset, not at 0)
+        const top = wrap.getBoundingClientRect().top - i * PEEK;
         const arriving = Math.min(Math.max(top / (vh * 0.5), 0), 1);
         const tilt = Number(card.dataset.tilt) * arriving;
         // covered: the next card riding over pushes this one into the deck
         let cover = 0;
         const next = wraps[i + 1];
         if (next) {
-          cover = Math.min(Math.max(1 - next.getBoundingClientRect().top / vh, 0), 1);
+          const nextTop = next.getBoundingClientRect().top - (i + 1) * PEEK;
+          cover = Math.min(Math.max(1 - nextTop / vh, 0), 1);
         }
         card.style.transform = `rotate(${tilt}deg) scale(${1 - 0.05 * cover})`;
         card.style.filter = `brightness(${1 - 0.2 * cover})`;
@@ -95,12 +103,13 @@ export function Process() {
             <div
               key={i}
               data-deck-wrap
-              className="sticky top-0 flex h-screen items-center justify-center px-4 sm:px-8"
+              className="sticky flex h-screen items-center justify-center px-4 sm:px-8"
+              style={{ top: i * PEEK }}
             >
                 <article
                   data-deck-card
                   data-tilt={c.tilt}
-                  className="grid h-[min(78vh,700px)] w-full max-w-[1150px] grid-rows-[44%_1fr] overflow-hidden rounded-jar shadow-warm-lg will-change-transform md:h-[min(74vh,620px)] md:grid-cols-[54%_46%] md:grid-rows-none"
+                  className="grid h-[min(78vh,700px)] w-full max-w-[1150px] origin-top grid-rows-[44%_1fr] overflow-hidden rounded-jar shadow-warm-lg will-change-transform md:h-[min(74vh,620px)] md:grid-cols-[54%_46%] md:grid-rows-none"
                   style={{ backgroundColor: c.from }}
                 >
                   {/* fruit lithograph */}
