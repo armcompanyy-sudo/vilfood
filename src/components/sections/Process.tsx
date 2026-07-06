@@ -167,22 +167,6 @@ export function Process() {
                         className="h-full w-full object-cover"
                       />
                     )}
-                    {i === 0 && (
-                      <>
-                        {/* feather the video edge into the panel colour so the
-                            two halves read as one printed sheet */}
-                        <span
-                          aria-hidden
-                          className="absolute inset-y-0 right-0 hidden w-24 md:block"
-                          style={{ background: `linear-gradient(90deg, rgba(173,96,9,0) 0%, ${c.from} 100%)` }}
-                        />
-                        <span
-                          aria-hidden
-                          className="absolute inset-x-0 bottom-0 h-16 md:hidden"
-                          style={{ background: `linear-gradient(180deg, rgba(173,96,9,0) 0%, ${c.from} 100%)` }}
-                        />
-                      </>
-                    )}
                     <span
                       aria-hidden
                       className="absolute -bottom-[0.16em] left-5 font-display text-[6rem] font-semibold leading-none text-cream/[0.13] md:left-7 md:text-[11.5rem]"
@@ -191,12 +175,22 @@ export function Process() {
                     </span>
                   </div>
 
-                  {/* step copy */}
+                  {/* step copy — card 01's panel is the outpainted continuation
+                      of the video's painted wall (colour-matched to how the
+                      browser renders the codec), so art and text share one
+                      textured canvas */}
                   <div
                     className="relative flex flex-col justify-center px-7 py-7 md:px-16"
-                    style={{
-                      background: `linear-gradient(115deg, ${c.from} 0%, ${c.to} 100%)`,
-                    }}
+                    style={
+                      i === 0
+                        ? {
+                            backgroundColor: c.from,
+                            backgroundImage: "url(/img/process/harvest-panel.webp)",
+                            backgroundSize: "cover",
+                            backgroundPosition: "left top",
+                          }
+                        : { background: `linear-gradient(115deg, ${c.from} 0%, ${c.to} 100%)` }
+                    }
                   >
                     <p className="eyebrow flex items-center gap-2.5 text-cream/65">
                       <SunSigil className="h-3.5 w-3.5 shrink-0 text-apricot-light" />
