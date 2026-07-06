@@ -57,8 +57,8 @@ const CARDS: {
     to: "#955308",
   },
   {
-    img: "/img/process/prepare-poster-wide-2.webp",
-    video: "/video/prepare-cherries-wide-2.mp4",
+    img: "/img/process/prepare-poster-wide-3.webp",
+    video: "/video/prepare-wide-3.mp4",
     rate: 1.15,
     num: "02",
     tilt: 0.5,
@@ -66,8 +66,8 @@ const CARDS: {
     to: "#441718",
   },
   {
-    img: "/img/process/seal-poster-wide.webp",
-    video: "/video/seal-press-wide.mp4",
+    img: "/img/process/seal-poster-wide-3.webp",
+    video: "/video/seal-wide-3.mp4",
     rate: 1.15,
     num: "03",
     tilt: -0.4,
@@ -75,8 +75,8 @@ const CARDS: {
     to: "#2E161D",
   },
   {
-    img: "/img/process/deliver-poster-wide-2.webp",
-    video: "/video/deliver-crate-wide-2.mp4",
+    img: "/img/process/deliver-poster-wide-3.webp",
+    video: "/video/deliver-wide-3.mp4",
     rate: 1.1,
     // the crate is wide: on lg+ the window fits it whole AND still ends in
     // quiet wall; below lg the pool crops at the card edge instead
