@@ -141,11 +141,11 @@ export function Process() {
                 <article
                   data-deck-card
                   data-tilt={c.tilt}
-                  className="grid h-[min(78vh,700px)] w-full max-w-[1150px] origin-top grid-rows-[44%_1fr] overflow-hidden rounded-jar will-change-transform md:h-[min(74vh,620px)] md:grid-cols-[54%_46%] md:grid-rows-none"
+                  className="grid h-[min(78vh,700px)] w-full max-w-[1150px] origin-top grid-rows-[1fr_44%] overflow-hidden rounded-jar will-change-transform md:h-[min(74vh,620px)] md:grid-cols-[54%_46%] md:grid-rows-none"
                   style={{ backgroundColor: c.from }}
                 >
-                  {/* step lithograph */}
-                  <div className="relative overflow-hidden">
+                  {/* step lithograph — below the copy on mobile, left of it on md+ */}
+                  <div className="order-last relative overflow-hidden md:order-none">
                     {i === 0 ? (
                       <video
                         data-toss-video
