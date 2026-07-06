@@ -40,6 +40,7 @@ export interface ProductLine {
 export interface Step {
   t: string;
   b: string;
+  f: string; // the step's fruit (deck card motif)
 }
 export interface Dict {
   meta: {
@@ -205,18 +206,22 @@ const en: Dict = {
     steps: [
       {
         t: "Harvest",
+        f: "Apricot",
         b: "Fruit is picked at peak ripeness from orchards across the Kotayk highlands, in the cool of the morning.",
       },
       {
         t: "Prepare",
+        f: "Cherry",
         b: "Sorted, washed and readied by hand. Only ripe, whole fruit makes the cut — everything else goes back to the earth.",
       },
       {
         t: "Seal",
+        f: "Plum",
         b: "Cooked gently and sealed the same day under certified food-safety controls, so nothing is lost but time.",
       },
       {
         t: "Deliver",
+        f: "Grape",
         b: "Cased, labelled and sent — to Armenia's best supermarkets and across the border to partners in Russia.",
       },
     ],
@@ -332,18 +337,22 @@ const ru: DeepPartial<Dict> = {
     steps: [
       {
         t: "Сбор",
+        f: "Абрикос",
         b: "Фрукты снимают на пике спелости в садах Котайкского нагорья, в утренней прохладе.",
       },
       {
         t: "Подготовка",
+        f: "Вишня",
         b: "Сортируют, моют и готовят вручную. Идёт только спелый, целый фрукт — остальное возвращается земле.",
       },
       {
         t: "Закрытие",
+        f: "Слива",
         b: "Варят бережно и закрывают в тот же день под сертифицированным контролем безопасности — теряется только время.",
       },
       {
         t: "Доставка",
+        f: "Виноград",
         b: "Упаковано, подписано и отправлено — в лучшие супермаркеты Армении и за границу, партнёрам в России.",
       },
     ],
@@ -459,18 +468,22 @@ const hy: DeepPartial<Dict> = {
     steps: [
       {
         t: "Բերքահավաք",
+        f: "Ծիրան",
         b: "Միրգը քաղվում է հասունության գագաթնակետին՝ Կոտայքի լեռնաշխարհի այգիներից, առավոտյան զովին։",
       },
       {
         t: "Նախապատրաստում",
+        f: "Բալ",
         b: "Տեսակավորվում, լվացվում և պատրաստվում է ձեռքով։ Անցնում է միայն հասուն, ամբողջական միրգը՝ մնացածը վերադառնում է հողին։",
       },
       {
         t: "Փակում",
+        f: "Սալոր",
         b: "Եփվում է նրբորեն և փակվում նույն օրը՝ հավաստագրված անվտանգության հսկողությամբ, որ կորչի միայն ժամանակը։",
       },
       {
         t: "Առաքում",
+        f: "Խաղող",
         b: "Փաթեթավորվում, պիտակվում և ուղարկվում է՝ Հայաստանի լավագույն սուպերմարկետներ և սահմանից այն կողմ՝ ռուս գործընկերներին։",
       },
     ],

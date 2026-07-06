@@ -1,47 +1,58 @@
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef } from "react";
 import { useI18n } from "../../lib/i18n";
-import { Eyebrow } from "../Sun";
+import { Eyebrow, SunSigil } from "../Sun";
 import { useScrollReveal } from "../../hooks/useScrollReveal";
+import { prefersReducedMotion } from "../../lib/motion";
 
 /**
- * One illustration per step (harvest → prepare → seal → deliver).
- * `pos` is the object-position focal point: with object-cover the container
- * crops the edges on resize, and `pos` keeps the grandmother / the action in
- * frame at every size. `bg` only shows for a beat while the image loads.
+ * The process as a deck of fruit cards. Each step lives in a tall wrapper
+ * whose card is position:sticky — scrolling lets the next card ride in and
+ * cover the previous one (native scroll, no pinning). A light rAF scroll
+ * layer adds the hand-made feel: cards arrive with a slight tilt that
+ * straightens as they dock, and covered cards sink back (scale + dim).
+ *
+ * One fruit per step, lithograph artwork on the card's own deep colour;
+ * the text panel's gradient starts at the artwork's edge colour so the
+ * two halves read as one printed card.
  */
-const VISUALS = [
-  { img: "/img/process-harvest-v3.webp", pos: "50% 40%", bg: "#cfe0c4" },
-  { img: "/img/process-prepare-v3.webp", pos: "50% 45%", bg: "#d6e0c9" },
-  { img: "/img/process-seal-v3.webp", pos: "50% 42%", bg: "#e6d6c2" },
-  { img: "/img/process-deliver-v3.webp", pos: "50% 45%", bg: "#dfe4ea" },
+const CARDS = [
+  { img: "/img/process/apricot.webp", num: "01", tilt: -0.6, from: "#AC6315", to: "#945512" },
+  { img: "/img/process/cherry.webp", num: "02", tilt: 0.5, from: "#711B22", to: "#61171E" },
+  { img: "/img/process/plum.webp", num: "03", tilt: -0.4, from: "#4C2132", to: "#411C2B" },
+  { img: "/img/process/grape.webp", num: "04", tilt: 0.6, from: "#3C4821", to: "#343D1C" },
 ];
 
 export function Process() {
   const { t } = useI18n();
   const headerRef = useScrollReveal<HTMLDivElement>();
-  const stepsRef = useRef<HTMLDivElement>(null);
-  const [active, setActive] = useState(0);
+  const deckRef = useRef<HTMLDivElement>(null);
 
-  // pick the step whose block is closest to the viewport centre
   useEffect(() => {
-    const root = stepsRef.current;
-    if (!root) return;
-    const blocks = Array.from(root.querySelectorAll<HTMLElement>("[data-step]"));
+    const root = deckRef.current;
+    if (!root || prefersReducedMotion()) return;
+    const wraps = Array.from(root.querySelectorAll<HTMLElement>("[data-deck-wrap]"));
+    const cards = Array.from(root.querySelectorAll<HTMLElement>("[data-deck-card]"));
     let raf = 0;
+
     const update = () => {
       raf = 0;
-      const mid = window.innerHeight / 2;
-      let best = 0;
-      let bestDist = Infinity;
-      blocks.forEach((b, i) => {
-        const r = b.getBoundingClientRect();
-        const d = Math.abs(r.top + r.height / 2 - mid);
-        if (d < bestDist) {
-          bestDist = d;
-          best = i;
+      const vh = window.innerHeight;
+      wraps.forEach((wrap, i) => {
+        const card = cards[i];
+        if (!card) return;
+        // arriving: the hand-placed tilt straightens as the card docks
+        const top = wrap.getBoundingClientRect().top;
+        const arriving = Math.min(Math.max(top / (vh * 0.5), 0), 1);
+        const tilt = Number(card.dataset.tilt) * arriving;
+        // covered: the next card riding over pushes this one into the deck
+        let cover = 0;
+        const next = wraps[i + 1];
+        if (next) {
+          cover = Math.min(Math.max(1 - next.getBoundingClientRect().top / vh, 0), 1);
         }
+        card.style.transform = `rotate(${tilt}deg) scale(${1 - 0.05 * cover})`;
+        card.style.filter = `brightness(${1 - 0.2 * cover})`;
       });
-      setActive(best);
     };
     const onScroll = () => {
       if (!raf) raf = requestAnimationFrame(update);
@@ -57,97 +68,81 @@ export function Process() {
   }, []);
 
   return (
-    <section id="process" className="relative bg-cream py-24 md:py-32">
+    <section id="process" className="relative bg-cream pt-24 md:pt-32">
       <div className="mx-auto max-w-[1320px] px-5 sm:px-8">
         <div ref={headerRef}>
           <div className="reveal">
             <Eyebrow>{t.process.eyebrow}</Eyebrow>
           </div>
-          <h2 className="reveal mt-7 max-w-3xl font-display text-display-md font-semibold leading-[1.05] text-ink">{t.process.title}</h2>
+          <h2 className="reveal mt-7 max-w-3xl font-display text-display-md font-semibold leading-[1.05] text-ink">
+            {t.process.title}
+          </h2>
           <p className="reveal mt-6 max-w-xl text-pretty text-ink/70 md:text-lg">
             {t.process.lede}
           </p>
         </div>
+      </div>
 
-        <div className="mt-8 grid gap-10 md:grid-cols-2 md:gap-16">
-          {/* sticky visual (desktop) — crossfades through the four steps */}
-          <div className="order-1 hidden md:block">
-            <div className="sticky top-0 flex h-[82vh] items-center">
-              <div className="relative aspect-[4/3] w-full overflow-hidden rounded-jar shadow-warm-lg">
-                {VISUALS.map((v, i) => (
-                  <div
-                    key={i}
-                    className="absolute inset-0 transition-opacity duration-700 ease-editorial"
-                    style={{ backgroundColor: v.bg, opacity: active === i ? 1 : 0 }}
-                  >
+      {/* the deck */}
+      <div ref={deckRef}>
+        {t.process.steps.map((s, i) => {
+          const c = CARDS[i];
+          if (!c) return null;
+          return (
+            <div
+              key={i}
+              data-deck-wrap
+              className={i === t.process.steps.length - 1 ? "h-screen" : "h-[105vh]"}
+            >
+              <div className="sticky top-0 flex h-screen items-center justify-center px-4 sm:px-8">
+                <article
+                  data-deck-card
+                  data-tilt={c.tilt}
+                  className="grid h-[min(78vh,700px)] w-full max-w-[1150px] grid-rows-[44%_1fr] overflow-hidden rounded-jar shadow-warm-lg will-change-transform md:h-[min(74vh,620px)] md:grid-cols-[54%_46%] md:grid-rows-none"
+                  style={{ backgroundColor: c.from }}
+                >
+                  {/* fruit lithograph */}
+                  <div className="relative overflow-hidden">
                     <img
-                      src={v.img}
+                      src={c.img}
                       alt=""
                       aria-hidden
-                      loading="lazy"
+                      loading={i === 0 ? "eager" : "lazy"}
                       decoding="async"
                       className="h-full w-full object-cover"
-                      style={{ objectPosition: v.pos }}
                     />
-                    {/* scrim keeps the step label readable over the artwork */}
-                    <div
-                      className="pointer-events-none absolute inset-x-0 bottom-0 h-2/5"
-                      style={{
-                        background:
-                          "linear-gradient(to top, rgba(35,28,22,0.62), transparent)",
-                      }}
-                    />
-                    <span className="absolute bottom-5 left-6 font-display text-2xl italic text-cream drop-shadow">
-                      {t.process.steps[i]?.t}
+                    <span
+                      aria-hidden
+                      className="absolute -bottom-[0.16em] left-5 font-display text-[6rem] font-semibold leading-none text-cream/[0.13] md:left-7 md:text-[11.5rem]"
+                    >
+                      {c.num}
                     </span>
                   </div>
-                ))}
+
+                  {/* step copy */}
+                  <div
+                    className="relative flex flex-col justify-center px-7 py-7 md:px-16"
+                    style={{
+                      background: `linear-gradient(115deg, ${c.from} 0%, ${c.to} 100%)`,
+                    }}
+                  >
+                    <p className="eyebrow flex items-center gap-2.5 text-cream/65">
+                      <SunSigil className="h-3.5 w-3.5 shrink-0 text-apricot-light" />
+                      {c.num} / 04 · {s.f}
+                    </p>
+                    <h3 className="mt-4 font-display text-3xl font-semibold leading-tight text-cream md:mt-5 md:text-[2.75rem]">
+                      {s.t}
+                    </h3>
+                    <p className="mt-4 max-w-[24rem] text-[0.95rem] leading-relaxed text-cream/80 md:mt-5 md:text-[1.05rem]">
+                      {s.b}
+                    </p>
+                    <span aria-hidden className="absolute right-7 top-6 h-px w-11 bg-cream/30" />
+                  </div>
+                </article>
               </div>
             </div>
-          </div>
-
-          {/* steps */}
-          <div ref={stepsRef} className="order-2">
-            {t.process.steps.map((s, i) => (
-              <div
-                key={i}
-                data-step
-                className="flex min-h-[52vh] flex-col justify-center border-t border-ink/10 py-10 first:border-t-0 md:min-h-[86vh] md:border-t-0"
-              >
-                {/* per-step illustration (mobile only — desktop uses the sticky visual) */}
-                <div className="mb-7 overflow-hidden rounded-jar shadow-warm md:hidden">
-                  <img
-                    src={VISUALS[i]?.img}
-                    alt=""
-                    aria-hidden
-                    loading="lazy"
-                    decoding="async"
-                    className="aspect-[4/3] w-full object-cover"
-                    style={{ objectPosition: VISUALS[i]?.pos }}
-                  />
-                </div>
-
-                <span
-                  className={`eyebrow transition-colors duration-500 ${
-                    active === i ? "text-apricot-deep" : "text-ink/40"
-                  }`}
-                >
-                  {String(i + 1).padStart(2, "0")} / {String(t.process.steps.length).padStart(2, "0")}
-                </span>
-                <h3
-                  className={`mt-3 font-display text-[clamp(1.5rem,7.5vw,2.25rem)] font-semibold transition-colors duration-500 md:text-5xl ${
-                    active === i ? "text-ink" : "text-ink/45"
-                  }`}
-                >
-                  {s.t}
-                </h3>
-                <p className="mt-4 max-w-md text-pretty text-base leading-relaxed text-ink/70 md:text-lg">
-                  {s.b}
-                </p>
-              </div>
-            ))}
-          </div>
-        </div>
+          );
+        })}
       </div>
     </section>
   );
