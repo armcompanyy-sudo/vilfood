@@ -156,7 +156,6 @@ export function Process() {
                     <p className="mt-4 max-w-[24rem] text-[0.95rem] leading-relaxed text-cream/80 md:mt-5 md:text-[1.05rem]">
                       {s.b}
                     </p>
-                    <span aria-hidden className="absolute right-7 top-6 h-px w-11 bg-cream/30" />
                   </div>
                 </article>
             </div>
