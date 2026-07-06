@@ -2,7 +2,7 @@ import { useEffect, useRef } from "react";
 import { useI18n } from "../../lib/i18n";
 import { Eyebrow, SunSigil } from "../Sun";
 import { useScrollReveal } from "../../hooks/useScrollReveal";
-import { prefersReducedMotion } from "../../lib/motion";
+import { gsap, prefersReducedMotion } from "../../lib/motion";
 
 /**
  * The process as a deck of fruit cards. Each full-screen wrapper is
@@ -29,7 +29,7 @@ import { prefersReducedMotion } from "../../lib/motion";
 const PEEK = 24;
 
 const CARDS = [
-  { img: "/img/process/apricot.webp", num: "01", tilt: -0.6, from: "#AC6315", to: "#945512" },
+  { img: "/img/process/harvest-hand.webp", num: "01", tilt: -0.6, from: "#A15907", to: "#8B4D06" },
   { img: "/img/process/cherry.webp", num: "02", tilt: 0.5, from: "#711B22", to: "#61171E" },
   { img: "/img/process/plum.webp", num: "03", tilt: -0.4, from: "#4C2132", to: "#411C2B" },
   { img: "/img/process/grape.webp", num: "04", tilt: 0.6, from: "#3C4821", to: "#343D1C" },
@@ -82,6 +82,71 @@ export function Process() {
     };
   }, []);
 
+  // card 01: the harvest toss. The apricot is a transparent cutout resting
+  // in the painted hand; GSAP loops a throw-and-catch while the card is on
+  // screen. The rest point is derived from the hand art's object-cover
+  // geometry so the fruit tracks the palm at every container size.
+  useEffect(() => {
+    const root = deckRef.current;
+    if (!root) return;
+    const stage = root.querySelector<HTMLElement>("[data-toss]");
+    const fruit = root.querySelector<HTMLElement>("[data-toss-fruit]");
+    if (!stage || !fruit) return;
+
+    const IMG = 980; // hand art is square
+    const PALM = { x: 0.485, y: 0.7 }; // fruit rest point, image fractions
+    const OBJ_Y = 0.75; // must match the hand img's object-position y
+    const FRUIT_W = 0.165; // fruit width as a fraction of the drawn art
+    const RATIO = 384 / 370; // fruit art height / width
+
+    let tl: gsap.core.Timeline | null = null;
+    let visible = false;
+
+    const place = () => {
+      const cw = stage.clientWidth;
+      const ch = stage.clientHeight;
+      if (!cw || !ch) return;
+      const disp = IMG * Math.max(cw / IMG, ch / IMG);
+      const ox = (cw - disp) / 2;
+      const oy = (ch - disp) * OBJ_Y;
+      const w = FRUIT_W * disp;
+      const h = w * RATIO;
+      const top = oy + PALM.y * disp - h / 2;
+      fruit.style.width = `${w}px`;
+      fruit.style.left = `${ox + PALM.x * disp - w / 2}px`;
+      fruit.style.top = `${top}px`;
+      tl?.kill();
+      tl = null;
+      if (prefersReducedMotion()) return;
+      // how high the throw can go without leaving the art area
+      const arc = Math.min(0.45 * ch, top - 12);
+      if (arc < 40) return; // no headroom — leave the fruit resting
+      gsap.set(fruit, { transformOrigin: "50% 88%" });
+      tl = gsap
+        .timeline({ repeat: -1, repeatDelay: 0.9, paused: !visible })
+        .to(fruit, { y: -arc, rotation: 180, duration: 0.55, ease: "power2.out" })
+        .to(fruit, { y: 0, rotation: 360, duration: 0.5, ease: "power2.in" })
+        .to(fruit, { scaleX: 1.09, scaleY: 0.88, duration: 0.09, ease: "power1.out" })
+        .to(fruit, { scaleX: 1, scaleY: 1, duration: 0.4, ease: "elastic.out(1,0.5)" })
+        .set(fruit, { rotation: 0 });
+    };
+
+    const io = new IntersectionObserver(([e]) => {
+      visible = e.isIntersecting;
+      if (visible) tl?.play();
+      else tl?.pause();
+    });
+    io.observe(stage);
+    const ro = new ResizeObserver(place);
+    ro.observe(stage);
+    place();
+    return () => {
+      io.disconnect();
+      ro.disconnect();
+      tl?.kill();
+    };
+  }, []);
+
   return (
     <section id="process" className="relative bg-cream pt-24 md:pt-32">
       {/* 1214 = card column (1150) + the deck wrappers' px-8 gutters, so the
@@ -123,16 +188,26 @@ export function Process() {
                   className="grid h-[min(78vh,700px)] w-full max-w-[1150px] origin-top grid-rows-[44%_1fr] overflow-hidden rounded-jar will-change-transform md:h-[min(74vh,620px)] md:grid-cols-[54%_46%] md:grid-rows-none"
                   style={{ backgroundColor: c.from }}
                 >
-                  {/* fruit lithograph */}
-                  <div className="relative overflow-hidden">
+                  {/* step lithograph */}
+                  <div className="relative overflow-hidden" {...(i === 0 ? { "data-toss": "" } : {})}>
                     <img
                       src={c.img}
                       alt=""
                       aria-hidden
                       loading={i === 0 ? "eager" : "lazy"}
                       decoding="async"
-                      className="h-full w-full object-cover"
+                      className={`h-full w-full object-cover ${i === 0 ? "object-[50%_75%]" : ""}`}
                     />
+                    {i === 0 && (
+                      <img
+                        src="/img/process/apricot-fruit.webp"
+                        data-toss-fruit
+                        alt=""
+                        aria-hidden
+                        decoding="async"
+                        className="absolute will-change-transform"
+                      />
+                    )}
                     <span
                       aria-hidden
                       className="absolute -bottom-[0.16em] left-5 font-display text-[6rem] font-semibold leading-none text-cream/[0.13] md:left-7 md:text-[11.5rem]"
