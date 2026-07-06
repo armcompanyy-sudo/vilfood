@@ -12,17 +12,21 @@ import { prefersReducedMotion } from "../../lib/motion";
  * sticky card inside its own wrapper gets carried away with it and the
  * cards never overlap. Each card docks PEEK px lower than the previous
  * one, so the top edge of every covered card stays visible above the
- * current one — the deck reads as a physical stack. A light rAF scroll
- * layer adds the hand-made feel: cards arrive with a slight tilt that
- * straightens as they dock, and covered cards sink back (scale + dim,
- * origin-top so the shrink never swallows the peeking edge).
+ * current one — the deck reads as a physical stack. Earlier wrappers get
+ * extra height (as bottom padding, so centering is unaffected): without
+ * it every wrapper clamps to the same containment limit at the deck's
+ * end, the staircase collapses and the last card hides all the others as
+ * the stack scrolls away. A light rAF scroll layer adds the hand-made
+ * feel: cards arrive with a slight tilt that straightens as they dock,
+ * and covered cards sink back (scale + dim, origin-top so the shrink
+ * never swallows the peeking edge).
  *
  * One fruit per step, lithograph artwork on the card's own deep colour;
  * the text panel's gradient starts at the artwork's edge colour so the
  * two halves read as one printed card.
  */
 /** How much of each covered card's top edge stays visible, px. */
-const PEEK = 16;
+const PEEK = 24;
 
 const CARDS = [
   { img: "/img/process/apricot.webp", num: "01", tilt: -0.6, from: "#AC6315", to: "#945512" },
@@ -99,12 +103,17 @@ export function Process() {
         {t.process.steps.map((s, i) => {
           const c = CARDS[i];
           if (!c) return null;
+          const slack = (t.process.steps.length - 1 - i) * PEEK;
           return (
             <div
               key={i}
               data-deck-wrap
-              className="sticky flex h-screen items-center justify-center px-4 sm:px-8"
-              style={{ top: i * PEEK }}
+              className="sticky flex items-center justify-center px-4 sm:px-8"
+              style={{
+                top: i * PEEK,
+                height: `calc(100vh + ${slack}px)`,
+                paddingBottom: slack,
+              }}
             >
                 <article
                   data-deck-card
@@ -153,6 +162,9 @@ export function Process() {
             </div>
           );
         })}
+        {/* rest beat: keeps the finished pile docked for a moment before
+            the whole staircase rides off together */}
+        <div aria-hidden className="h-[30vh]" />
       </div>
     </section>
   );
