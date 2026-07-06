@@ -92,6 +92,11 @@ export function Process() {
       deckRef.current?.querySelectorAll<HTMLVideoElement>("[data-toss-video]") ?? [],
     );
     if (!vids.length || prefersReducedMotion()) return;
+    // 1.25x keeps the toss lively — at 1x the apricot hangs too long
+    vids.forEach((v) => {
+      v.defaultPlaybackRate = 1.25;
+      v.playbackRate = 1.25;
+    });
     const io = new IntersectionObserver(
       ([e]) => {
         if (e.isIntersecting) vids.forEach((v) => v.play().catch(() => {}));
