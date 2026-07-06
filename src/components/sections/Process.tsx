@@ -28,11 +28,59 @@ import { prefersReducedMotion } from "../../lib/motion";
 /** How much of each covered card's top edge stays visible, px. */
 const PEEK = 24;
 
-const CARDS = [
-  { img: "/img/process/harvest-poster-wide.webp", num: "01", tilt: -0.6, from: "#AD6009", to: "#955308" },
-  { img: "/img/process/cherry.webp", num: "02", tilt: 0.5, from: "#711B22", to: "#61171E" },
-  { img: "/img/process/plum.webp", num: "03", tilt: -0.4, from: "#4C2132", to: "#411C2B" },
-  { img: "/img/process/grape.webp", num: "04", tilt: 0.6, from: "#3C4821", to: "#343D1C" },
+/**
+ * Video cards play a wide 16:9 Seedance clip generated from the card's own
+ * lithograph (start frame = end frame, so the loop is seamless): the art
+ * cell shows the clip's left window, the text panel projects the clean
+ * right side of the SAME file — one codec, one canvas, no seams. `img` is
+ * the clip's first frame (poster / reduced-motion still); `rate` tunes the
+ * gesture's tempo without re-encoding.
+ */
+const CARDS: {
+  img: string;
+  video?: string;
+  rate?: number;
+  num: string;
+  tilt: number;
+  from: string;
+  to: string;
+}[] = [
+  {
+    img: "/img/process/harvest-poster-wide.webp",
+    video: "/video/harvest-toss-wide.mp4",
+    rate: 1.25,
+    num: "01",
+    tilt: -0.6,
+    from: "#AD6009",
+    to: "#955308",
+  },
+  {
+    img: "/img/process/prepare-poster-wide.webp",
+    video: "/video/prepare-cherries-wide.mp4",
+    rate: 1.15,
+    num: "02",
+    tilt: 0.5,
+    from: "#511C1D",
+    to: "#441718",
+  },
+  {
+    img: "/img/process/seal-poster-wide.webp",
+    video: "/video/seal-press-wide.mp4",
+    rate: 1.15,
+    num: "03",
+    tilt: -0.4,
+    from: "#371A23",
+    to: "#2E161D",
+  },
+  {
+    img: "/img/process/deliver-poster-wide.webp",
+    video: "/video/deliver-crate-wide.mp4",
+    rate: 1.1,
+    num: "04",
+    tilt: 0.6,
+    from: "#403F15",
+    to: "#363512",
+  },
 ];
 
 export function Process() {
@@ -82,29 +130,31 @@ export function Process() {
     };
   }, []);
 
-  // card 01: the harvest toss — a Seedance-animated take on the card's own
-  // lithograph (same frame opens and closes the clip, so the loop is
-  // seamless). The art cell and the text panel are two projections of the
-  // SAME wide clip. Posters = the first frame; playback only while the
-  // card is near the viewport, and never for reduced-motion users.
+  // Video cards: play a card's pair of projections while that card is near
+  // the viewport, pause it when it leaves; never plays for reduced motion.
   useEffect(() => {
-    const vids = Array.from(
-      deckRef.current?.querySelectorAll<HTMLVideoElement>("[data-toss-video]") ?? [],
+    const root = deckRef.current;
+    if (!root || prefersReducedMotion()) return;
+    const cards = Array.from(root.querySelectorAll<HTMLElement>("[data-deck-card]")).filter(
+      (c) => c.querySelector("video"),
     );
-    if (!vids.length || prefersReducedMotion()) return;
-    // 1.25x keeps the toss lively — at 1x the apricot hangs too long
-    vids.forEach((v) => {
-      v.defaultPlaybackRate = 1.25;
-      v.playbackRate = 1.25;
-    });
+    if (!cards.length) return;
     const io = new IntersectionObserver(
-      ([e]) => {
-        if (e.isIntersecting) vids.forEach((v) => v.play().catch(() => {}));
-        else vids.forEach((v) => v.pause());
+      (entries) => {
+        for (const e of entries) {
+          e.target.querySelectorAll<HTMLVideoElement>("video").forEach((v) => {
+            if (e.isIntersecting) {
+              const rate = Number(v.dataset.rate ?? 1);
+              v.defaultPlaybackRate = rate;
+              v.playbackRate = rate;
+              v.play().catch(() => {});
+            } else v.pause();
+          });
+        }
       },
       { rootMargin: "25% 0px" },
     );
-    io.observe(vids[0]);
+    cards.forEach((c) => io.observe(c));
     return () => io.disconnect();
   }, []);
 
@@ -151,10 +201,10 @@ export function Process() {
                 >
                   {/* step lithograph — below the copy on mobile, left of it on md+ */}
                   <div className="order-last relative overflow-hidden md:order-none">
-                    {i === 0 ? (
+                    {c.video ? (
                       <video
-                        data-toss-video
-                        src="/video/harvest-toss-wide.mp4"
+                        data-rate={c.rate ?? 1}
+                        src={c.video}
                         poster={c.img}
                         muted
                         loop
@@ -175,21 +225,21 @@ export function Process() {
                     )}
                   </div>
 
-                  {/* step copy — card 01's panel shows the same wide video's
-                      clean right side, so art and text literally share one
-                      canvas and one codec: the tones cannot diverge */}
+                  {/* step copy — a video card's panel shows the same wide
+                      clip's clean right side, so art and text literally share
+                      one canvas and one codec: the tones cannot diverge */}
                   <div
                     className="relative flex flex-col justify-center overflow-hidden px-7 py-7 md:px-16"
                     style={
-                      i === 0
+                      c.video
                         ? { backgroundColor: c.from }
                         : { background: `linear-gradient(115deg, ${c.from} 0%, ${c.to} 100%)` }
                     }
                   >
-                    {i === 0 && (
+                    {c.video && (
                       <video
-                        data-toss-video
-                        src="/video/harvest-toss-wide.mp4"
+                        data-rate={c.rate ?? 1}
+                        src={c.video}
                         poster={c.img}
                         muted
                         loop
