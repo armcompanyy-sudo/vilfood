@@ -375,12 +375,12 @@ export function Products() {
                         alt=""
                         draggable={false}
                         decoding="async"
-                        className="h-full w-auto max-w-none translate-y-[2px] select-none drop-shadow-[0_20px_26px_rgba(0,0,0,0.55)] transition-transform duration-500 ease-editorial group-hover/jar:-translate-y-3 group-hover/jar:rotate-[1.6deg] group-hover/jar:scale-[1.04]"
+                        className="h-full w-auto max-w-none translate-y-[3px] select-none drop-shadow-[0_10px_16px_rgba(0,0,0,0.28)] transition-transform duration-500 ease-editorial group-hover/jar:-translate-y-3 group-hover/jar:rotate-[1.6deg] group-hover/jar:scale-[1.04]"
                       />
                       {/* contact shadow pinned right under the glass base */}
                       <span
                         aria-hidden
-                        className="absolute -bottom-0.5 left-1/2 h-2.5 w-[74%] -translate-x-1/2 rounded-[50%] bg-black/60 blur-[5px] transition-all duration-500 ease-editorial group-hover/jar:scale-x-90 group-hover/jar:bg-black/35"
+                        className="absolute -bottom-[3px] left-1/2 h-[7px] w-[84%] -translate-x-1/2 rounded-[50%] bg-black/40 blur-[6px] transition-all duration-500 ease-editorial group-hover/jar:scale-x-90 group-hover/jar:bg-black/25"
                       />
                       {/* name whispered on the plank face */}
                       <span className="eyebrow pointer-events-none absolute left-1/2 top-full mt-5 -translate-x-1/2 whitespace-nowrap text-[0.6rem] text-cream/0 transition-colors duration-300 group-hover/jar:text-cream/75">
