@@ -2,7 +2,7 @@ import { useEffect, useRef } from "react";
 import { useI18n } from "../../lib/i18n";
 import { Eyebrow, SunSigil } from "../Sun";
 import { useScrollReveal } from "../../hooks/useScrollReveal";
-import { gsap, prefersReducedMotion } from "../../lib/motion";
+import { prefersReducedMotion } from "../../lib/motion";
 
 /**
  * The process as a deck of fruit cards. Each full-screen wrapper is
@@ -29,7 +29,7 @@ import { gsap, prefersReducedMotion } from "../../lib/motion";
 const PEEK = 24;
 
 const CARDS = [
-  { img: "/img/process/harvest-hand.webp", num: "01", tilt: -0.6, from: "#A15907", to: "#8B4D06" },
+  { img: "/img/process/harvest-poster.webp", num: "01", tilt: -0.6, from: "#A15907", to: "#8B4D06" },
   { img: "/img/process/cherry.webp", num: "02", tilt: 0.5, from: "#711B22", to: "#61171E" },
   { img: "/img/process/plum.webp", num: "03", tilt: -0.4, from: "#4C2132", to: "#411C2B" },
   { img: "/img/process/grape.webp", num: "04", tilt: 0.6, from: "#3C4821", to: "#343D1C" },
@@ -82,69 +82,22 @@ export function Process() {
     };
   }, []);
 
-  // card 01: the harvest toss. The apricot is a transparent cutout resting
-  // in the painted hand; GSAP loops a throw-and-catch while the card is on
-  // screen. The rest point is derived from the hand art's object-cover
-  // geometry so the fruit tracks the palm at every container size.
+  // card 01: the harvest toss — a Seedance-animated take on the card's own
+  // lithograph (same frame opens and closes the clip, so the loop is
+  // seamless). Poster = the first frame; playback only while the card is
+  // near the viewport, and never for reduced-motion users.
   useEffect(() => {
-    const root = deckRef.current;
-    if (!root) return;
-    const stage = root.querySelector<HTMLElement>("[data-toss]");
-    const fruit = root.querySelector<HTMLElement>("[data-toss-fruit]");
-    if (!stage || !fruit) return;
-
-    const IMG = 980; // hand art is square
-    const PALM = { x: 0.485, y: 0.7 }; // fruit rest point, image fractions
-    const OBJ_Y = 0.75; // must match the hand img's object-position y
-    const FRUIT_W = 0.165; // fruit width as a fraction of the drawn art
-    const RATIO = 384 / 370; // fruit art height / width
-
-    let tl: gsap.core.Timeline | null = null;
-    let visible = false;
-
-    const place = () => {
-      const cw = stage.clientWidth;
-      const ch = stage.clientHeight;
-      if (!cw || !ch) return;
-      const disp = IMG * Math.max(cw / IMG, ch / IMG);
-      const ox = (cw - disp) / 2;
-      const oy = (ch - disp) * OBJ_Y;
-      const w = FRUIT_W * disp;
-      const h = w * RATIO;
-      const top = oy + PALM.y * disp - h / 2;
-      fruit.style.width = `${w}px`;
-      fruit.style.left = `${ox + PALM.x * disp - w / 2}px`;
-      fruit.style.top = `${top}px`;
-      tl?.kill();
-      tl = null;
-      if (prefersReducedMotion()) return;
-      // how high the throw can go without leaving the art area
-      const arc = Math.min(0.45 * ch, top - 12);
-      if (arc < 40) return; // no headroom — leave the fruit resting
-      gsap.set(fruit, { transformOrigin: "50% 88%" });
-      tl = gsap
-        .timeline({ repeat: -1, repeatDelay: 0.9, paused: !visible })
-        .to(fruit, { y: -arc, rotation: 180, duration: 0.55, ease: "power2.out" })
-        .to(fruit, { y: 0, rotation: 360, duration: 0.5, ease: "power2.in" })
-        .to(fruit, { scaleX: 1.09, scaleY: 0.88, duration: 0.09, ease: "power1.out" })
-        .to(fruit, { scaleX: 1, scaleY: 1, duration: 0.4, ease: "elastic.out(1,0.5)" })
-        .set(fruit, { rotation: 0 });
-    };
-
-    const io = new IntersectionObserver(([e]) => {
-      visible = e.isIntersecting;
-      if (visible) tl?.play();
-      else tl?.pause();
-    });
-    io.observe(stage);
-    const ro = new ResizeObserver(place);
-    ro.observe(stage);
-    place();
-    return () => {
-      io.disconnect();
-      ro.disconnect();
-      tl?.kill();
-    };
+    const vid = deckRef.current?.querySelector<HTMLVideoElement>("[data-toss-video]");
+    if (!vid || prefersReducedMotion()) return;
+    const io = new IntersectionObserver(
+      ([e]) => {
+        if (e.isIntersecting) vid.play().catch(() => {});
+        else vid.pause();
+      },
+      { rootMargin: "25% 0px" },
+    );
+    io.observe(vid);
+    return () => io.disconnect();
   }, []);
 
   return (
@@ -189,23 +142,27 @@ export function Process() {
                   style={{ backgroundColor: c.from }}
                 >
                   {/* step lithograph */}
-                  <div className="relative overflow-hidden" {...(i === 0 ? { "data-toss": "" } : {})}>
-                    <img
-                      src={c.img}
-                      alt=""
-                      aria-hidden
-                      loading={i === 0 ? "eager" : "lazy"}
-                      decoding="async"
-                      className={`h-full w-full object-cover ${i === 0 ? "object-[50%_75%]" : ""}`}
-                    />
-                    {i === 0 && (
+                  <div className="relative overflow-hidden">
+                    {i === 0 ? (
+                      <video
+                        data-toss-video
+                        src="/video/harvest-toss.mp4"
+                        poster={c.img}
+                        muted
+                        loop
+                        playsInline
+                        preload="metadata"
+                        aria-hidden
+                        className="h-full w-full object-cover object-[50%_75%]"
+                      />
+                    ) : (
                       <img
-                        src="/img/process/apricot-fruit.webp"
-                        data-toss-fruit
+                        src={c.img}
                         alt=""
                         aria-hidden
+                        loading="lazy"
                         decoding="async"
-                        className="absolute will-change-transform"
+                        className="h-full w-full object-cover"
                       />
                     )}
                     <span
