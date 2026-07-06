@@ -5,11 +5,14 @@ import { useScrollReveal } from "../../hooks/useScrollReveal";
 import { prefersReducedMotion } from "../../lib/motion";
 
 /**
- * The process as a deck of fruit cards. Each step lives in a tall wrapper
- * whose card is position:sticky — scrolling lets the next card ride in and
- * cover the previous one (native scroll, no pinning). A light rAF scroll
- * layer adds the hand-made feel: cards arrive with a slight tilt that
- * straightens as they dock, and covered cards sink back (scale + dim).
+ * The process as a deck of fruit cards. Each full-screen wrapper is
+ * position:sticky inside the shared deck, so a docked card stays pinned to
+ * the viewport while the next one rides in and covers it (native scroll,
+ * no pinning). The wrappers must be the sticky elements themselves — a
+ * sticky card inside its own wrapper gets carried away with it and the
+ * cards never overlap. A light rAF scroll layer adds the hand-made feel:
+ * cards arrive with a slight tilt that straightens as they dock, and
+ * covered cards sink back (scale + dim).
  *
  * One fruit per step, lithograph artwork on the card's own deep colour;
  * the text panel's gradient starts at the artwork's edge colour so the
@@ -92,9 +95,8 @@ export function Process() {
             <div
               key={i}
               data-deck-wrap
-              className={i === t.process.steps.length - 1 ? "h-screen" : "h-[105vh]"}
+              className="sticky top-0 flex h-screen items-center justify-center px-4 sm:px-8"
             >
-              <div className="sticky top-0 flex h-screen items-center justify-center px-4 sm:px-8">
                 <article
                   data-deck-card
                   data-tilt={c.tilt}
@@ -139,7 +141,6 @@ export function Process() {
                     <span aria-hidden className="absolute right-7 top-6 h-px w-11 bg-cream/30" />
                   </div>
                 </article>
-              </div>
             </div>
           );
         })}
