@@ -168,12 +168,6 @@ export function Process() {
                         className="h-full w-full object-cover"
                       />
                     )}
-                    <span
-                      aria-hidden
-                      className="absolute -bottom-[0.16em] left-5 font-display text-[6rem] font-semibold leading-none text-cream/[0.13] md:left-7 md:text-[11.5rem]"
-                    >
-                      {c.num}
-                    </span>
                   </div>
 
                   {/* step copy — card 01's panel shows the same wide video's
