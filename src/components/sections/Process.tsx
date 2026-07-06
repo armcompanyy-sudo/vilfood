@@ -84,7 +84,9 @@ export function Process() {
 
   return (
     <section id="process" className="relative bg-cream pt-24 md:pt-32">
-      <div className="mx-auto max-w-[1320px] px-5 sm:px-8">
+      {/* 1214 = card column (1150) + the deck wrappers' px-8 gutters, so the
+          header's left edge lines up with the cards at every width */}
+      <div className="mx-auto max-w-[1214px] px-4 sm:px-8">
         <div ref={headerRef}>
           <div className="reveal">
             <Eyebrow>{t.process.eyebrow}</Eyebrow>
