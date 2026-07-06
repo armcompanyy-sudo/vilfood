@@ -67,12 +67,6 @@ export function Process() {
         }
         card.style.transform = `rotate(${tilt}deg) scale(${1 - 0.05 * cover})`;
         card.style.filter = `brightness(${1 - 0.2 * cover})`;
-        // fade a covered card's shadow out — otherwise four stacked (and
-        // brightness-dimmed) shadow-warm-lg casts overlap below the pile
-        // into one muddy band; the top card alone keeps the full shadow
-        card.style.boxShadow = `0 40px 120px -40px rgba(110, 64, 20, ${
-          0.55 * (1 - cover)
-        })`;
       });
     };
     const onScroll = () => {
@@ -124,7 +118,7 @@ export function Process() {
                 <article
                   data-deck-card
                   data-tilt={c.tilt}
-                  className="grid h-[min(78vh,700px)] w-full max-w-[1150px] origin-top grid-rows-[44%_1fr] overflow-hidden rounded-jar shadow-warm-lg will-change-transform md:h-[min(74vh,620px)] md:grid-cols-[54%_46%] md:grid-rows-none"
+                  className="grid h-[min(78vh,700px)] w-full max-w-[1150px] origin-top grid-rows-[44%_1fr] overflow-hidden rounded-jar will-change-transform md:h-[min(74vh,620px)] md:grid-cols-[54%_46%] md:grid-rows-none"
                   style={{ backgroundColor: c.from }}
                 >
                   {/* fruit lithograph */}
