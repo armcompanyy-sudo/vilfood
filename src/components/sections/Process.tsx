@@ -40,6 +40,8 @@ const CARDS: {
   img: string;
   video?: string;
   rate?: number;
+  /** object-position override for the art window (subject fit vs clean seam) */
+  artClass?: string;
   num: string;
   tilt: number;
   from: string;
@@ -55,8 +57,8 @@ const CARDS: {
     to: "#955308",
   },
   {
-    img: "/img/process/prepare-poster-wide.webp",
-    video: "/video/prepare-cherries-wide.mp4",
+    img: "/img/process/prepare-poster-wide-2.webp",
+    video: "/video/prepare-cherries-wide-2.mp4",
     rate: 1.15,
     num: "02",
     tilt: 0.5,
@@ -73,9 +75,12 @@ const CARDS: {
     to: "#2E161D",
   },
   {
-    img: "/img/process/deliver-poster-wide.webp",
-    video: "/video/deliver-crate-wide.mp4",
+    img: "/img/process/deliver-poster-wide-2.webp",
+    video: "/video/deliver-crate-wide-2.mp4",
     rate: 1.1,
+    // the crate is wide: on lg+ the window fits it whole AND still ends in
+    // quiet wall; below lg the pool crops at the card edge instead
+    artClass: "object-[35%_55%] lg:object-[22%_55%]",
     num: "04",
     tilt: 0.6,
     from: "#403F15",
@@ -211,7 +216,7 @@ export function Process() {
                         playsInline
                         preload="metadata"
                         aria-hidden
-                        className="h-full w-full object-cover object-[25%_55%]"
+                        className={`h-full w-full object-cover ${c.artClass ?? "object-[35%_55%]"}`}
                       />
                     ) : (
                       <img
@@ -246,7 +251,7 @@ export function Process() {
                         playsInline
                         preload="metadata"
                         aria-hidden
-                        className="absolute -inset-px h-[calc(100%+2px)] w-[calc(100%+2px)] object-cover object-right [transform-origin:100%_50%] [transform:scale(2)] md:[transform:scale(1.45)]"
+                        className="absolute -inset-px h-[calc(100%+2px)] w-[calc(100%+2px)] object-cover object-right [transform-origin:100%_12%] [transform:scale(2)] md:[transform:scale(1.7)]"
                       />
                     )}
                     <div className="relative">
