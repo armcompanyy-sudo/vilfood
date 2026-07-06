@@ -29,9 +29,7 @@ import { prefersReducedMotion } from "../../lib/motion";
 const PEEK = 24;
 
 const CARDS = [
-  // from = the video's right/bottom edge colour as the browser actually
-  // renders it (canvas-sampled; codec colour-space shifts the webp values)
-  { img: "/img/process/harvest-poster.webp", num: "01", tilt: -0.6, from: "#AD6009", to: "#955308" },
+  { img: "/img/process/harvest-poster-wide.webp", num: "01", tilt: -0.6, from: "#AD6009", to: "#955308" },
   { img: "/img/process/cherry.webp", num: "02", tilt: 0.5, from: "#711B22", to: "#61171E" },
   { img: "/img/process/plum.webp", num: "03", tilt: -0.4, from: "#4C2132", to: "#411C2B" },
   { img: "/img/process/grape.webp", num: "04", tilt: 0.6, from: "#3C4821", to: "#343D1C" },
@@ -86,19 +84,22 @@ export function Process() {
 
   // card 01: the harvest toss — a Seedance-animated take on the card's own
   // lithograph (same frame opens and closes the clip, so the loop is
-  // seamless). Poster = the first frame; playback only while the card is
-  // near the viewport, and never for reduced-motion users.
+  // seamless). The art cell and the text panel are two projections of the
+  // SAME wide clip. Posters = the first frame; playback only while the
+  // card is near the viewport, and never for reduced-motion users.
   useEffect(() => {
-    const vid = deckRef.current?.querySelector<HTMLVideoElement>("[data-toss-video]");
-    if (!vid || prefersReducedMotion()) return;
+    const vids = Array.from(
+      deckRef.current?.querySelectorAll<HTMLVideoElement>("[data-toss-video]") ?? [],
+    );
+    if (!vids.length || prefersReducedMotion()) return;
     const io = new IntersectionObserver(
       ([e]) => {
-        if (e.isIntersecting) vid.play().catch(() => {});
-        else vid.pause();
+        if (e.isIntersecting) vids.forEach((v) => v.play().catch(() => {}));
+        else vids.forEach((v) => v.pause());
       },
       { rootMargin: "25% 0px" },
     );
-    io.observe(vid);
+    io.observe(vids[0]);
     return () => io.disconnect();
   }, []);
 
@@ -148,14 +149,14 @@ export function Process() {
                     {i === 0 ? (
                       <video
                         data-toss-video
-                        src="/video/harvest-toss.mp4"
+                        src="/video/harvest-toss-wide.mp4"
                         poster={c.img}
                         muted
                         loop
                         playsInline
                         preload="metadata"
                         aria-hidden
-                        className="h-full w-full object-cover object-[50%_75%]"
+                        className="h-full w-full object-cover object-[25%_55%]"
                       />
                     ) : (
                       <img
@@ -175,33 +176,42 @@ export function Process() {
                     </span>
                   </div>
 
-                  {/* step copy — card 01's panel is the outpainted continuation
-                      of the video's painted wall (colour-matched to how the
-                      browser renders the codec), so art and text share one
-                      textured canvas */}
+                  {/* step copy — card 01's panel shows the same wide video's
+                      clean right side, so art and text literally share one
+                      canvas and one codec: the tones cannot diverge */}
                   <div
-                    className="relative flex flex-col justify-center px-7 py-7 md:px-16"
+                    className="relative flex flex-col justify-center overflow-hidden px-7 py-7 md:px-16"
                     style={
                       i === 0
-                        ? {
-                            backgroundColor: c.from,
-                            backgroundImage: "url(/img/process/harvest-panel.webp)",
-                            backgroundSize: "cover",
-                            backgroundPosition: "left top",
-                          }
+                        ? { backgroundColor: c.from }
                         : { background: `linear-gradient(115deg, ${c.from} 0%, ${c.to} 100%)` }
                     }
                   >
-                    <p className="eyebrow flex items-center gap-2.5 text-cream/65">
-                      <SunSigil className="h-3.5 w-3.5 shrink-0 text-apricot-light" />
-                      {c.num} / 04 · {s.f}
-                    </p>
-                    <h3 className="mt-4 font-display text-3xl font-semibold leading-tight text-cream md:mt-5 md:text-[2.75rem]">
-                      {s.t}
-                    </h3>
-                    <p className="mt-4 max-w-[24rem] text-[0.95rem] leading-relaxed text-cream/80 md:mt-5 md:text-[1.05rem]">
-                      {s.b}
-                    </p>
+                    {i === 0 && (
+                      <video
+                        data-toss-video
+                        src="/video/harvest-toss-wide.mp4"
+                        poster={c.img}
+                        muted
+                        loop
+                        playsInline
+                        preload="metadata"
+                        aria-hidden
+                        className="absolute inset-0 h-full w-full object-cover object-right [transform-origin:100%_50%] [transform:scale(2)] md:[transform:none]"
+                      />
+                    )}
+                    <div className="relative">
+                      <p className="eyebrow flex items-center gap-2.5 text-cream/65">
+                        <SunSigil className="h-3.5 w-3.5 shrink-0 text-apricot-light" />
+                        {c.num} / 04 · {s.f}
+                      </p>
+                      <h3 className="mt-4 font-display text-3xl font-semibold leading-tight text-cream md:mt-5 md:text-[2.75rem]">
+                        {s.t}
+                      </h3>
+                      <p className="mt-4 max-w-[24rem] text-[0.95rem] leading-relaxed text-cream/80 md:mt-5 md:text-[1.05rem]">
+                        {s.b}
+                      </p>
+                    </div>
                   </div>
                 </article>
             </div>
