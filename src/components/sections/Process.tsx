@@ -67,6 +67,12 @@ export function Process() {
         }
         card.style.transform = `rotate(${tilt}deg) scale(${1 - 0.05 * cover})`;
         card.style.filter = `brightness(${1 - 0.2 * cover})`;
+        // fade a covered card's shadow out — otherwise four stacked (and
+        // brightness-dimmed) shadow-warm-lg casts overlap below the pile
+        // into one muddy band; the top card alone keeps the full shadow
+        card.style.boxShadow = `0 40px 120px -40px rgba(110, 64, 20, ${
+          0.55 * (1 - cover)
+        })`;
       });
     };
     const onScroll = () => {
