@@ -38,14 +38,14 @@ const CARDS = [
   },
   {
     obj: "/img/process/obj-spoon.webp",
-    objClass: "right-[10%] w-[26%] md:right-[12%] md:w-[18%]",
+    objClass: "right-[8%] w-[31%] md:right-[10%] md:w-[22%]",
     num: "02",
     tilt: 0.5,
     bg: "#6E1B22",
   },
   {
     obj: "/img/process/obj-jar-3.webp",
-    objClass: "right-[10%] w-[26%] md:right-[12%] md:w-[17%]",
+    objClass: "right-[8%] w-[31%] md:right-[10%] md:w-[21%]",
     num: "03",
     tilt: -0.4,
     bg: "#47521F",
