@@ -41,21 +41,21 @@ const CARDS = [
     objClass: "right-[8%] w-[31%] md:right-[10%] md:w-[22%]",
     num: "02",
     tilt: 0.5,
-    bg: "#6E1B22",
+    bg: "#78212B",
   },
   {
     obj: "/img/process/obj-spoon.webp",
     objClass: "right-[8%] w-[31%] md:right-[10%] md:w-[21%]",
     num: "03",
     tilt: -0.4,
-    bg: "#47521F",
+    bg: "#3A5635",
   },
   {
     obj: "/img/process/obj-crate-2.webp",
     objClass: "right-[8%] w-[42%] md:right-[9%] md:w-[28%]",
     num: "04",
     tilt: 0.6,
-    bg: "#6B6355",
+    bg: "#745634",
   },
 ];
 
