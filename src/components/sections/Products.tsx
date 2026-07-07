@@ -376,10 +376,6 @@ export function Products() {
                         alt=""
                         draggable={false}
                         decoding="async"
-                        // below the fold — let the hero/LCP finish first; the
-                        // shelf's layout math needs the jars' real width, so we
-                        // keep them eager (not lazy) but at low priority
-                        fetchPriority="low"
                         className="h-full w-auto max-w-none translate-y-[3px] select-none drop-shadow-[0_10px_16px_rgba(0,0,0,0.28)] transition-transform duration-500 ease-editorial group-hover/jar:-translate-y-3 group-hover/jar:rotate-[1.6deg] group-hover/jar:scale-[1.04]"
                       />
                       {/* contact shadow pinned right under the glass base */}

@@ -66,26 +66,15 @@ export function Hero() {
   // Reduced-motion users get the static image instead of the autoplay video.
   const [reduceMotion] = useState(() => prefersReducedMotion());
 
-  // The 4 MB hero video stays out of the initial HTML preload (the small
-  // preloaded webp poster is the LCP and paints instantly). Its src is
-  // attached on the very next frame after mount — so the poster shows with
-  // zero delay, then the video comes alive right away rather than sitting
-  // static. Same file, full quality; it just doesn't block first paint.
+  // Play the background video a touch slower for a calmer, more premium feel.
   useEffect(() => {
     const v = videoRef.current;
-    if (!v || reduceMotion) return;
+    if (!v) return;
     const setRate = () => {
       v.playbackRate = 0.8;
     };
+    setRate();
     v.addEventListener("loadedmetadata", setRate);
-
-    // Attach the source here (effects run after the committed DOM has
-    // painted, so the preloaded poster is already on screen) — the video
-    // comes alive immediately without ever blocking first paint.
-    v.src = "/video/hero-loop.mp4";
-    v.load();
-    v.play().catch(() => {});
-
     return () => v.removeEventListener("loadedmetadata", setRate);
   }, [reduceMotion]);
 
@@ -138,9 +127,11 @@ export function Hero() {
           muted
           loop
           playsInline
-          preload="none"
+          preload="auto"
           aria-hidden="true"
-        />
+        >
+          <source src="/video/hero-loop.mp4" type="video/mp4" />
+        </video>
       )}
 
       {/* legibility scrims */}
