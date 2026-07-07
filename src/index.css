@@ -169,6 +169,12 @@ html[lang="hy"] :is(h1, h2, h3) {
      lines; greedy wrapping + the non-breaking spaces baked into the HY copy
      gives tidy, predictable breaks instead. */
   text-wrap: normal;
+}
+/* The hero headline is a two-line slide-up reveal whose masks are tuned to a
+   tight leading — keep its original 0.95 so the extra HY heading air doesn't
+   pull its two lines apart. */
+html[lang="hy"] #top h1 {
+  line-height: 0.95;
   /* Override the global heading `overflow-wrap: anywhere`, which chops long
      Armenian words mid-glyph and strands a single trailing character
      («…ասու / մ»). break-word keeps whole words and only falls back to the
