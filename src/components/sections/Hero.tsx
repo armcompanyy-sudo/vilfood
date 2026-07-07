@@ -66,10 +66,11 @@ export function Hero() {
   // Reduced-motion users get the static image instead of the autoplay video.
   const [reduceMotion] = useState(() => prefersReducedMotion());
 
-  // The 4 MB hero video is kept off the critical path: the poster (a small
-  // preloaded webp) is the LCP and paints instantly, then the video source is
-  // attached once the browser is idle so it never competes with first paint.
-  // Same file, full quality — only the load timing changes.
+  // The 4 MB hero video stays out of the initial HTML preload (the small
+  // preloaded webp poster is the LCP and paints instantly). Its src is
+  // attached on the very next frame after mount — so the poster shows with
+  // zero delay, then the video comes alive right away rather than sitting
+  // static. Same file, full quality; it just doesn't block first paint.
   useEffect(() => {
     const v = videoRef.current;
     if (!v || reduceMotion) return;
@@ -78,26 +79,14 @@ export function Hero() {
     };
     v.addEventListener("loadedmetadata", setRate);
 
-    let started = false;
-    const start = () => {
-      if (started) return;
-      started = true;
-      v.src = "/video/hero-loop.mp4";
-      v.load();
-      v.play().catch(() => {});
-    };
-    const ric = (window as unknown as {
-      requestIdleCallback?: (cb: () => void, o?: { timeout: number }) => number;
-    }).requestIdleCallback;
-    const id = ric ? ric(start, { timeout: 2500 }) : window.setTimeout(start, 1200);
+    // Attach the source here (effects run after the committed DOM has
+    // painted, so the preloaded poster is already on screen) — the video
+    // comes alive immediately without ever blocking first paint.
+    v.src = "/video/hero-loop.mp4";
+    v.load();
+    v.play().catch(() => {});
 
-    return () => {
-      v.removeEventListener("loadedmetadata", setRate);
-      const cic = (window as unknown as { cancelIdleCallback?: (id: number) => void })
-        .cancelIdleCallback;
-      if (ric && cic) cic(id);
-      else window.clearTimeout(id);
-    };
+    return () => v.removeEventListener("loadedmetadata", setRate);
   }, [reduceMotion]);
 
   // headline entrance — unaffected by reduced motion (which skips it entirely)
