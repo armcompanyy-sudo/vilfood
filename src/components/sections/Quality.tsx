@@ -31,11 +31,11 @@ export function Quality() {
           {t.quality.body}
         </p>
 
-        <ul className="reveal mx-auto mt-10 flex max-w-3xl flex-col items-stretch justify-center gap-2.5 sm:mt-14 sm:flex-row sm:gap-5">
+        <ul className="reveal mx-auto mt-9 flex max-w-[19rem] flex-col items-stretch justify-center gap-2.5 sm:mt-14 sm:max-w-3xl sm:flex-row sm:gap-5">
           {t.quality.points.map((p) => (
             <li
               key={p}
-              className="flex flex-1 items-center justify-center gap-2.5 rounded-full border border-cream/15 px-5 py-4 text-sm font-medium text-cream/85"
+              className="flex flex-1 items-center gap-3 rounded-2xl border border-cream/15 px-5 py-3.5 text-left text-[0.9rem] font-medium leading-snug text-cream/85 sm:justify-center sm:rounded-full sm:px-5 sm:py-4 sm:text-center sm:text-sm"
             >
               <SunSigil className="h-4 w-4 shrink-0 text-apricot" />
               {p}
