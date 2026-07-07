@@ -32,7 +32,7 @@ const CARDS = [
   {
     obj: "/img/process/obj-apricot.webp",
     objClass: "md:right-[8%] md:w-[27%]",
-    objMobile: "w-[52%]",
+    objMobile: "w-[62%]",
     num: "01",
     tilt: -0.9,
     bg: "#A66B12",
@@ -40,7 +40,7 @@ const CARDS = [
   {
     obj: "/img/process/obj-spoon.webp",
     objClass: "md:right-[10%] md:w-[22%]",
-    objMobile: "w-[44%]",
+    objMobile: "w-[54%]",
     num: "02",
     tilt: 0.8,
     bg: "#78212B",
@@ -48,7 +48,7 @@ const CARDS = [
   {
     obj: "/img/process/obj-jar-3.webp",
     objClass: "md:right-[10%] md:w-[21%]",
-    objMobile: "w-[42%]",
+    objMobile: "w-[40%]",
     num: "03",
     tilt: -0.7,
     bg: "#47521F",
@@ -56,7 +56,7 @@ const CARDS = [
   {
     obj: "/img/process/obj-crate-2.webp",
     objClass: "md:right-[9%] md:w-[28%]",
-    objMobile: "w-[64%]",
+    objMobile: "w-[74%]",
     num: "04",
     tilt: 0.9,
     bg: "#453019",
