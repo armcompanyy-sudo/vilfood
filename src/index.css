@@ -160,6 +160,11 @@
 html[lang="hy"] :is(h1, h2, h3) {
   letter-spacing: 0.03em;
   word-spacing: 0.16em;
+  /* Armenian letterforms are taller than Latin, so the display sizes'
+     tight 0.9–1.05 leading crams the lines together. Give HY multi-line
+     titles noticeably more air (unlayered, so it wins over the inline
+     leading-* utilities). */
+  line-height: 1.28;
   /* `balance` + long unbreakable Armenian words produces orphan one-word
      lines; greedy wrapping + the non-breaking spaces baked into the HY copy
      gives tidy, predictable breaks instead. */
