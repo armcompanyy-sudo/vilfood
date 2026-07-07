@@ -55,7 +55,7 @@ const CARDS = [
     objClass: "right-[8%] w-[42%] md:right-[9%] md:w-[28%]",
     num: "04",
     tilt: 0.6,
-    bg: "#745634",
+    bg: "#5F4120",
   },
 ];
 
