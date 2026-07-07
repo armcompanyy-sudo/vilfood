@@ -31,28 +31,32 @@ const NOISE =
 const CARDS = [
   {
     obj: "/img/process/obj-apricot.webp",
-    objClass: "right-[6%] w-[36%] md:right-[8%] md:w-[27%]",
+    objClass: "md:right-[8%] md:w-[27%]",
+    objMobile: "w-[52%]",
     num: "01",
     tilt: -0.9,
     bg: "#A66B12",
   },
   {
     obj: "/img/process/obj-spoon.webp",
-    objClass: "right-[8%] w-[31%] md:right-[10%] md:w-[22%]",
+    objClass: "md:right-[10%] md:w-[22%]",
+    objMobile: "w-[44%]",
     num: "02",
     tilt: 0.8,
     bg: "#78212B",
   },
   {
     obj: "/img/process/obj-jar-3.webp",
-    objClass: "right-[8%] w-[31%] md:right-[10%] md:w-[21%]",
+    objClass: "md:right-[10%] md:w-[21%]",
+    objMobile: "w-[42%]",
     num: "03",
     tilt: -0.7,
     bg: "#47521F",
   },
   {
     obj: "/img/process/obj-crate-2.webp",
-    objClass: "right-[8%] w-[42%] md:right-[9%] md:w-[28%]",
+    objClass: "md:right-[9%] md:w-[28%]",
+    objMobile: "w-[64%]",
     num: "04",
     tilt: 0.9,
     bg: "#453019",
@@ -212,9 +216,12 @@ export function Process() {
                   <div
                     data-obj
                     aria-hidden
-                    className={`pointer-events-none absolute top-0 bottom-[44%] flex items-center will-change-transform md:bottom-0 ${c.objClass}`}
+                    className={`pointer-events-none absolute inset-x-0 top-0 bottom-[44%] flex items-center justify-center will-change-transform md:bottom-0 md:left-auto md:justify-start ${c.objClass}`}
                   >
-                    <div className="obj-float" style={{ animationDelay: `${i * -0.9}s` }}>
+                    <div
+                      className={`obj-float ${c.objMobile} md:w-full`}
+                      style={{ animationDelay: `${i * -0.9}s` }}
+                    >
                       <img
                         src={c.obj}
                         alt=""
