@@ -230,10 +230,10 @@ export function Process() {
                       <SunSigil className="h-3.5 w-3.5 shrink-0 text-apricot-light" />
                       {c.num} / 04
                     </p>
-                    <h3 className="mt-4 font-display text-4xl font-semibold leading-tight text-cream md:mt-5 md:text-[3rem]">
+                    <h3 className="mt-4 font-display text-[2.6rem] font-semibold leading-tight text-cream md:mt-5 md:text-[3.5rem]">
                       {s.t}
                     </h3>
-                    <p className="mt-4 max-w-[24rem] text-[1.05rem] leading-relaxed text-cream/85 md:mt-5 md:max-w-[26rem] md:text-[1.15rem]">
+                    <p className="mt-4 max-w-[26rem] text-[1.15rem] leading-relaxed text-cream/85 md:mt-6 md:max-w-[30rem] md:text-[1.3rem]">
                       {s.b}
                     </p>
                   </div>
