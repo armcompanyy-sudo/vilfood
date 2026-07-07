@@ -48,7 +48,7 @@ const CARDS = [
     objClass: "right-[8%] w-[31%] md:right-[10%] md:w-[21%]",
     num: "03",
     tilt: -0.7,
-    bg: "#3A5635",
+    bg: "#47521F",
   },
   {
     obj: "/img/process/obj-crate-2.webp",
