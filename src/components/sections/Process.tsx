@@ -64,9 +64,36 @@ const CARDS = [
 ];
 
 export function Process() {
-  const { t } = useI18n();
+  const { t, locale } = useI18n();
   const headerRef = useScrollReveal<HTMLDivElement>();
   const deckRef = useRef<HTMLDivElement>(null);
+
+  // Keep every card title on a single line. Most titles fit at their CSS
+  // size; a long word (e.g. Armenian «Նախապատրաստում» on a phone) is scaled
+  // down just enough to fit — short titles keep their full size, so the
+  // hierarchy holds. Re-runs on resize, locale change and once fonts load,
+  // since glyph widths (and thus the fit) depend on the active font.
+  useEffect(() => {
+    const root = deckRef.current;
+    if (!root) return;
+    const titles = Array.from(root.querySelectorAll<HTMLElement>("[data-fit-title]"));
+    const fit = () => {
+      titles.forEach((el) => {
+        el.style.fontSize = "";
+        el.style.whiteSpace = "nowrap";
+        const base = parseFloat(getComputedStyle(el).fontSize);
+        const need = el.scrollWidth;
+        const avail = el.clientWidth;
+        if (need > avail && avail > 0) {
+          el.style.fontSize = `${Math.max(base * 0.5, (base * avail) / need) * 0.99}px`;
+        }
+      });
+    };
+    fit();
+    window.addEventListener("resize", fit);
+    document.fonts?.ready.then(fit);
+    return () => window.removeEventListener("resize", fit);
+  }, [locale]);
 
   // deck choreography: arriving tilt straightens as a card docks, a covered
   // card sinks back (scale + dim), and the object drifts on its own plane
@@ -243,7 +270,7 @@ export function Process() {
                       <SunSigil className="h-3.5 w-3.5 shrink-0 text-apricot-light" />
                       {c.num} / 04
                     </p>
-                    <h3 className="mt-4 font-display text-[2.9rem] font-semibold leading-tight text-cream md:mt-5 md:text-[4rem]">
+                    <h3 data-fit-title className="mt-4 font-display text-[2.9rem] font-semibold leading-tight text-cream md:mt-5 md:text-[4rem]">
                       {s.t}
                     </h3>
                     <p className="mt-4 max-w-[26rem] text-[1.25rem] leading-relaxed text-cream/85 md:mt-6 md:max-w-[32rem] md:text-[1.45rem]">
