@@ -33,28 +33,28 @@ const CARDS = [
     obj: "/img/process/obj-apricot.webp",
     objClass: "right-[6%] w-[36%] md:right-[8%] md:w-[27%]",
     num: "01",
-    tilt: -0.6,
+    tilt: -0.9,
     bg: "#A66B12",
   },
   {
-    obj: "/img/process/obj-jar-3.webp",
+    obj: "/img/process/obj-spoon.webp",
     objClass: "right-[8%] w-[31%] md:right-[10%] md:w-[22%]",
     num: "02",
-    tilt: 0.5,
+    tilt: 0.8,
     bg: "#78212B",
   },
   {
-    obj: "/img/process/obj-spoon.webp",
+    obj: "/img/process/obj-jar-3.webp",
     objClass: "right-[8%] w-[31%] md:right-[10%] md:w-[21%]",
     num: "03",
-    tilt: -0.4,
+    tilt: -0.7,
     bg: "#3A5635",
   },
   {
     obj: "/img/process/obj-crate-2.webp",
     objClass: "right-[8%] w-[42%] md:right-[9%] md:w-[28%]",
     num: "04",
-    tilt: 0.6,
+    tilt: 0.9,
     bg: "#5F4120",
   },
 ];
@@ -97,7 +97,7 @@ export function Process() {
         card.style.filter = `brightness(${1 - 0.2 * cover})`;
         const obj = objs[i];
         if (obj) {
-          obj.style.transform = `translateY(${(arriving * 16 - cover * 18).toFixed(1)}px)`;
+          obj.style.transform = `translateY(${(arriving * 26 - cover * 30).toFixed(1)}px)`;
         }
       });
     };
@@ -124,18 +124,18 @@ export function Process() {
     const cleanups: (() => void)[] = [];
     root.querySelectorAll<HTMLElement>("[data-magnetic]").forEach((el) => {
       gsap.set(el, { transformPerspective: 900 });
-      const rx = gsap.quickTo(el, "rotationX", { duration: 0.55, ease: "power3.out" });
-      const ry = gsap.quickTo(el, "rotationY", { duration: 0.55, ease: "power3.out" });
-      const tx = gsap.quickTo(el, "x", { duration: 0.55, ease: "power3.out" });
-      const ty = gsap.quickTo(el, "y", { duration: 0.55, ease: "power3.out" });
+      const rx = gsap.quickTo(el, "rotationX", { duration: 0.45, ease: "power3.out" });
+      const ry = gsap.quickTo(el, "rotationY", { duration: 0.45, ease: "power3.out" });
+      const tx = gsap.quickTo(el, "x", { duration: 0.45, ease: "power3.out" });
+      const ty = gsap.quickTo(el, "y", { duration: 0.45, ease: "power3.out" });
       const move = (e: PointerEvent) => {
         const r = el.getBoundingClientRect();
         const px = (e.clientX - r.left) / r.width - 0.5;
         const py = (e.clientY - r.top) / r.height - 0.5;
-        rx(-py * 3.5);
-        ry(px * 4.5);
-        tx(px * 10);
-        ty(py * 8);
+        rx(-py * 5);
+        ry(px * 6);
+        tx(px * 14);
+        ty(py * 11);
       };
       const leave = () => {
         rx(0);

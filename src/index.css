@@ -112,7 +112,7 @@
   }
   /* Process deck objects: slow weightless bob (reduced motion: still) */
   .obj-float {
-    animation: obj-float 3.8s ease-in-out infinite;
+    animation: obj-float 3s ease-in-out infinite;
     will-change: transform;
   }
   @media (prefers-reduced-motion: reduce) {
@@ -227,9 +227,9 @@ html[lang="hy"] [data-deck-card] h3 {
 @keyframes obj-float {
   0%,
   100% {
-    transform: translateY(0) rotate(-0.8deg);
+    transform: translateY(0) rotate(-1.4deg);
   }
   50% {
-    transform: translateY(-13px) rotate(1deg);
+    transform: translateY(-17px) rotate(1.6deg);
   }
 }
