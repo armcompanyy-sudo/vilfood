@@ -2,89 +2,60 @@ import { useEffect, useRef } from "react";
 import { useI18n } from "../../lib/i18n";
 import { Eyebrow, SunSigil } from "../Sun";
 import { useScrollReveal } from "../../hooks/useScrollReveal";
-import { prefersReducedMotion } from "../../lib/motion";
+import { gsap, prefersReducedMotion } from "../../lib/motion";
 
 /**
- * The process as a deck of fruit cards. Each full-screen wrapper is
- * position:sticky inside the shared deck, so a docked card stays pinned to
- * the viewport while the next one rides in and covers it (native scroll,
- * no pinning). The wrappers must be the sticky elements themselves — a
- * sticky card inside its own wrapper gets carried away with it and the
+ * The process as a deck of premium object cards. Each full-screen wrapper
+ * is position:sticky inside the shared deck, so a docked card stays pinned
+ * to the viewport while the next one rides in and covers it (native
+ * scroll, no pinning). The wrappers must be the sticky elements themselves
+ * — a sticky card inside its own wrapper gets carried away with it and the
  * cards never overlap. Each card docks PEEK px lower than the previous
  * one, so the top edge of every covered card stays visible above the
- * current one — the deck reads as a physical stack. Earlier wrappers get
- * extra height (as bottom padding, so centering is unaffected): without
- * it every wrapper clamps to the same containment limit at the deck's
- * end, the staircase collapses and the last card hides all the others as
- * the stack scrolls away. A light rAF scroll layer adds the hand-made
- * feel: cards arrive with a slight tilt that straightens as they dock,
- * and covered cards sink back (scale + dim, origin-top so the shrink
- * never swallows the peeking edge).
+ * current one; earlier wrappers get extra height (as bottom padding, so
+ * centering is unaffected) or the staircase would collapse against the
+ * deck's containment limit as the stack scrolls away.
  *
- * One fruit per step, lithograph artwork on the card's own deep colour;
- * the text panel's gradient starts at the artwork's edge colour so the
- * two halves read as one printed card.
+ * Card anatomy: a solid brand-colour surface with an SVG noise grain, a
+ * photoreal isolated object that pops out of the card's top edge (contour
+ * drop-shadow, infinite CSS float, scroll parallax from the deck's rAF),
+ * and the step copy. A GSAP magnetic hover tilts the inner wrapper so it
+ * never fights the deck's own arrive/cover transforms on the article.
  */
-/** How much of each covered card's top edge stays visible, px. */
 const PEEK = 24;
 
-/**
- * Video cards play a wide 16:9 Seedance clip generated from the card's own
- * lithograph (start frame = end frame, so the loop is seamless): the art
- * cell shows the clip's left window, the text panel projects the clean
- * right side of the SAME file — one codec, one canvas, no seams. `img` is
- * the clip's first frame (poster / reduced-motion still); `rate` tunes the
- * gesture's tempo without re-encoding.
- */
-const CARDS: {
-  img: string;
-  video?: string;
-  rate?: number;
-  /** object-position override for the art window (subject fit vs clean seam) */
-  artClass?: string;
-  num: string;
-  tilt: number;
-  from: string;
-  to: string;
-}[] = [
+/** Tactile paper grain, blended over each card's solid colour. */
+const NOISE =
+  "url(\"data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E\")";
+
+const CARDS = [
   {
-    img: "/img/process/harvest-poster-wide.webp",
-    video: "/video/harvest-toss-wide.mp4",
-    rate: 1.25,
+    obj: "/img/process/obj-apricot.webp",
+    objClass: "-top-[8%] right-[3%] w-[46%] md:-top-[13%] md:-right-[1%] md:w-[32%]",
     num: "01",
     tilt: -0.6,
-    from: "#AD6009",
-    to: "#955308",
+    bg: "#A66B12",
   },
   {
-    img: "/img/process/prepare-poster-wide-3.webp",
-    video: "/video/prepare-wide-3.mp4",
-    rate: 1.15,
+    obj: "/img/process/obj-spoon.webp",
+    objClass: "-top-[11%] right-[7%] w-[36%] md:-top-[15%] md:right-[5%] md:w-[24%]",
     num: "02",
     tilt: 0.5,
-    from: "#511C1D",
-    to: "#441718",
+    bg: "#6E1B22",
   },
   {
-    img: "/img/process/seal-poster-wide-3.webp",
-    video: "/video/seal-wide-3.mp4",
-    rate: 1.15,
+    obj: "/img/process/obj-jar.webp",
+    objClass: "-top-[8%] right-[6%] w-[36%] md:-top-[12%] md:right-[4%] md:w-[23%]",
     num: "03",
     tilt: -0.4,
-    from: "#371A23",
-    to: "#2E161D",
+    bg: "#47521F",
   },
   {
-    img: "/img/process/deliver-poster-wide-3.webp",
-    video: "/video/deliver-wide-3.mp4",
-    rate: 1.1,
-    // the crate is wide: on lg+ the window fits it whole AND still ends in
-    // quiet wall; below lg the pool crops at the card edge instead
-    artClass: "object-[35%_55%] lg:object-[22%_55%]",
+    obj: "/img/process/obj-crate.webp",
+    objClass: "-top-[5%] -right-[4%] w-[56%] md:-top-[10%] md:-right-[3%] md:w-[40%]",
     num: "04",
     tilt: 0.6,
-    from: "#403F15",
-    to: "#363512",
+    bg: "#6B6355",
   },
 ];
 
@@ -93,11 +64,15 @@ export function Process() {
   const headerRef = useScrollReveal<HTMLDivElement>();
   const deckRef = useRef<HTMLDivElement>(null);
 
+  // deck choreography: arriving tilt straightens as a card docks, a covered
+  // card sinks back (scale + dim), and the object drifts on its own plane
+  // (scroll parallax) — all from one rAF scroll handler.
   useEffect(() => {
     const root = deckRef.current;
     if (!root || prefersReducedMotion()) return;
     const wraps = Array.from(root.querySelectorAll<HTMLElement>("[data-deck-wrap]"));
     const cards = Array.from(root.querySelectorAll<HTMLElement>("[data-deck-card]"));
+    const objs = Array.from(root.querySelectorAll<HTMLElement>("[data-obj]"));
     let raf = 0;
 
     const update = () => {
@@ -120,6 +95,10 @@ export function Process() {
         }
         card.style.transform = `rotate(${tilt}deg) scale(${1 - 0.05 * cover})`;
         card.style.filter = `brightness(${1 - 0.2 * cover})`;
+        const obj = objs[i];
+        if (obj) {
+          obj.style.transform = `translateY(${(arriving * 30 - cover * 34).toFixed(1)}px)`;
+        }
       });
     };
     const onScroll = () => {
@@ -135,32 +114,43 @@ export function Process() {
     };
   }, []);
 
-  // Video cards: play a card's pair of projections while that card is near
-  // the viewport, pause it when it leaves; never plays for reduced motion.
+  // magnetic hover: the inner wrapper leans toward the cursor (pointer
+  // devices only) — the deck's own transforms live on the article, so the
+  // two never fight over one style.transform.
   useEffect(() => {
     const root = deckRef.current;
     if (!root || prefersReducedMotion()) return;
-    const cards = Array.from(root.querySelectorAll<HTMLElement>("[data-deck-card]")).filter(
-      (c) => c.querySelector("video"),
-    );
-    if (!cards.length) return;
-    const io = new IntersectionObserver(
-      (entries) => {
-        for (const e of entries) {
-          e.target.querySelectorAll<HTMLVideoElement>("video").forEach((v) => {
-            if (e.isIntersecting) {
-              const rate = Number(v.dataset.rate ?? 1);
-              v.defaultPlaybackRate = rate;
-              v.playbackRate = rate;
-              v.play().catch(() => {});
-            } else v.pause();
-          });
-        }
-      },
-      { rootMargin: "25% 0px" },
-    );
-    cards.forEach((c) => io.observe(c));
-    return () => io.disconnect();
+    if (window.matchMedia("(hover: none)").matches) return;
+    const cleanups: (() => void)[] = [];
+    root.querySelectorAll<HTMLElement>("[data-magnetic]").forEach((el) => {
+      gsap.set(el, { transformPerspective: 900 });
+      const rx = gsap.quickTo(el, "rotationX", { duration: 0.55, ease: "power3.out" });
+      const ry = gsap.quickTo(el, "rotationY", { duration: 0.55, ease: "power3.out" });
+      const tx = gsap.quickTo(el, "x", { duration: 0.55, ease: "power3.out" });
+      const ty = gsap.quickTo(el, "y", { duration: 0.55, ease: "power3.out" });
+      const move = (e: PointerEvent) => {
+        const r = el.getBoundingClientRect();
+        const px = (e.clientX - r.left) / r.width - 0.5;
+        const py = (e.clientY - r.top) / r.height - 0.5;
+        rx(-py * 3.5);
+        ry(px * 4.5);
+        tx(px * 10);
+        ty(py * 8);
+      };
+      const leave = () => {
+        rx(0);
+        ry(0);
+        tx(0);
+        ty(0);
+      };
+      el.addEventListener("pointermove", move);
+      el.addEventListener("pointerleave", leave);
+      cleanups.push(() => {
+        el.removeEventListener("pointermove", move);
+        el.removeEventListener("pointerleave", leave);
+      });
+    });
+    return () => cleanups.forEach((f) => f());
   }, []);
 
   return (
@@ -198,76 +188,57 @@ export function Process() {
                 paddingBottom: slack,
               }}
             >
-                <article
-                  data-deck-card
-                  data-tilt={c.tilt}
-                  className="grid h-[min(78vh,700px)] w-full max-w-[1150px] origin-top grid-rows-[1fr_44%] overflow-hidden rounded-jar will-change-transform md:h-[min(74vh,620px)] md:grid-cols-[54%_46%] md:grid-rows-none"
-                  style={{ backgroundColor: c.from }}
-                >
-                  {/* step lithograph — below the copy on mobile, left of it on md+ */}
-                  <div className="order-last relative overflow-hidden md:order-none">
-                    {c.video ? (
-                      <video
-                        data-rate={c.rate ?? 1}
-                        src={c.video}
-                        poster={c.img}
-                        muted
-                        loop
-                        playsInline
-                        preload="metadata"
-                        aria-hidden
-                        className={`h-full w-full object-cover ${c.artClass ?? "object-[35%_55%]"}`}
-                      />
-                    ) : (
-                      <img
-                        src={c.img}
-                        alt=""
-                        aria-hidden
-                        loading="lazy"
-                        decoding="async"
-                        className="h-full w-full object-cover"
-                      />
-                    )}
+              <article
+                data-deck-card
+                data-tilt={c.tilt}
+                className="relative h-[min(78vh,700px)] w-full max-w-[1150px] origin-top will-change-transform md:h-[min(74vh,620px)]"
+              >
+                <div data-magnetic className="relative h-full w-full will-change-transform">
+                  {/* card surface: solid brand colour + tactile noise */}
+                  <div
+                    aria-hidden
+                    className="absolute inset-0 overflow-hidden rounded-jar"
+                    style={{ backgroundColor: c.bg }}
+                  >
+                    <span
+                      className="pointer-events-none absolute inset-0"
+                      style={{ backgroundImage: NOISE, opacity: 0.09, mixBlendMode: "overlay" }}
+                    />
                   </div>
 
-                  {/* step copy — a video card's panel shows the same wide
-                      clip's clean right side, so art and text literally share
-                      one canvas and one codec: the tones cannot diverge */}
+                  {/* the object pops out of the card's top edge */}
                   <div
-                    className="relative flex flex-col justify-center overflow-hidden px-7 py-7 md:px-16"
-                    style={
-                      c.video
-                        ? { backgroundColor: c.from }
-                        : { background: `linear-gradient(115deg, ${c.from} 0%, ${c.to} 100%)` }
-                    }
+                    data-obj
+                    aria-hidden
+                    className={`pointer-events-none absolute will-change-transform ${c.objClass}`}
                   >
-                    {c.video && (
-                      <video
-                        data-rate={c.rate ?? 1}
-                        src={c.video}
-                        poster={c.img}
-                        muted
-                        loop
-                        playsInline
-                        preload="metadata"
-                        aria-hidden
-                        className="absolute -inset-px h-[calc(100%+2px)] w-[calc(100%+2px)] object-cover object-right [transform-origin:100%_12%] [transform:scale(2)] md:[transform:scale(1.7)]"
+                    <div className="obj-float" style={{ animationDelay: `${i * -0.9}s` }}>
+                      <img
+                        src={c.obj}
+                        alt=""
+                        draggable={false}
+                        loading={i === 0 ? "eager" : "lazy"}
+                        decoding="async"
+                        className="h-auto w-full select-none [filter:drop-shadow(0_15px_25px_rgba(0,0,0,0.25))]"
                       />
-                    )}
-                    <div className="relative">
-                      <p className="eyebrow flex items-center gap-2.5 text-cream/65">
-                        <SunSigil className="h-3.5 w-3.5 shrink-0 text-apricot-light" />
-                        {c.num} / 04 · {s.f}
-                      </p>
-                      <h3 className="mt-4 font-display text-4xl font-semibold leading-tight text-cream md:mt-5 md:text-[3rem]">
-                        {s.t}
-                      </h3>
-                      <p className="mt-4 max-w-[26rem] text-[1.05rem] leading-relaxed text-cream/80 md:mt-5 md:text-[1.15rem]">
-                        {s.b}
-                      </p>
                     </div>
                   </div>
-                </article>
+
+                  {/* step copy */}
+                  <div className="relative flex h-full flex-col justify-end px-7 pb-10 md:justify-center md:px-16 md:pb-0">
+                    <p className="eyebrow flex items-center gap-2.5 text-cream/65">
+                      <SunSigil className="h-3.5 w-3.5 shrink-0 text-apricot-light" />
+                      {c.num} / 04
+                    </p>
+                    <h3 className="mt-4 font-display text-4xl font-semibold leading-tight text-cream md:mt-5 md:text-[3rem]">
+                      {s.t}
+                    </h3>
+                    <p className="mt-4 max-w-[24rem] text-[1.05rem] leading-relaxed text-cream/85 md:mt-5 md:max-w-[26rem] md:text-[1.15rem]">
+                      {s.b}
+                    </p>
+                  </div>
+                </div>
+              </article>
             </div>
           );
         })}

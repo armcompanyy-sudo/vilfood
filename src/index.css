@@ -110,6 +110,16 @@
   .text-balance {
     text-wrap: balance;
   }
+  /* Process deck objects: slow weightless bob (reduced motion: still) */
+  .obj-float {
+    animation: obj-float 3.8s ease-in-out infinite;
+    will-change: transform;
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .obj-float {
+      animation: none;
+    }
+  }
   /* horizontal scrollers that hide their scrollbar (the shelf) */
   .no-scrollbar {
     scrollbar-width: none;
@@ -201,5 +211,15 @@ html[lang="hy"] .text-display-sm {
     animation-duration: 0.001ms !important;
     animation-iteration-count: 1 !important;
     scroll-behavior: auto !important;
+  }
+}
+
+@keyframes obj-float {
+  0%,
+  100% {
+    transform: translateY(0) rotate(-0.8deg);
+  }
+  50% {
+    transform: translateY(-13px) rotate(1deg);
   }
 }
