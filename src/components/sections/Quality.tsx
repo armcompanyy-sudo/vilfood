@@ -10,7 +10,7 @@ export function Quality() {
     <section
       id="quality"
       ref={ref}
-      className="relative overflow-hidden bg-ink py-24 text-cream md:py-36"
+      className="relative overflow-hidden bg-ink py-20 text-cream md:py-36"
     >
       {/* warm sun-glow */}
       <div
@@ -26,12 +26,12 @@ export function Quality() {
         <div className="reveal flex justify-center">
           <Eyebrow tone="cream">{t.quality.eyebrow}</Eyebrow>
         </div>
-        <h2 className="reveal mx-auto mt-7 max-w-3xl font-display text-display-md font-semibold leading-[1.05] text-cream">{t.quality.title}</h2>
-        <p className="reveal mx-auto mt-8 max-w-2xl text-pretty text-lg leading-relaxed text-cream/75">
+        <h2 className="reveal mx-auto mt-6 max-w-3xl font-display text-[2.15rem] font-semibold leading-[1.08] text-cream md:mt-7 md:text-display-md md:leading-[1.05]">{t.quality.title}</h2>
+        <p className="reveal mx-auto mt-5 max-w-[19rem] text-pretty text-[0.95rem] leading-[1.65] text-cream/75 sm:max-w-2xl sm:text-lg sm:leading-relaxed md:mt-8">
           {t.quality.body}
         </p>
 
-        <ul className="reveal mx-auto mt-14 flex max-w-3xl flex-col items-stretch justify-center gap-3 sm:flex-row sm:gap-5">
+        <ul className="reveal mx-auto mt-10 flex max-w-3xl flex-col items-stretch justify-center gap-2.5 sm:mt-14 sm:flex-row sm:gap-5">
           {t.quality.points.map((p) => (
             <li
               key={p}
