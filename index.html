@@ -33,7 +33,13 @@
         position: fixed;
         inset: 0;
         z-index: 0;
-        background: #f4ede1 url("/img/hero-video-poster.webp") 50% 58% / cover no-repeat;
+        /* full poster on top; a ~0.8 KB inline blurred LQIP underneath paints
+           the scene the instant the HTML arrives, so there is never a cream
+           frame while the 292 KB poster downloads */
+        background:
+          url("/img/hero-video-poster.webp") 50% 58% / cover no-repeat,
+          url("data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/2wBDABMNDhEODBMRDxEVFBMXHTAfHRoaHToqLCMwRT1JR0Q9Q0FMVm1dTFFoUkFDX4JgaHF1e3x7SlyGkIV3j214e3b/2wBDARQVFR0ZHTgfHzh2T0NPdnZ2dnZ2dnZ2dnZ2dnZ2dnZ2dnZ2dnZ2dnZ2dnZ2dnZ2dnZ2dnZ2dnZ2dnZ2dnZ2dnb/wAARCAAeACgDASIAAhEBAxEB/8QAHwAAAQUBAQEBAQEAAAAAAAAAAAECAwQFBgcICQoL/8QAtRAAAgEDAwIEAwUFBAQAAAF9AQIDAAQRBRIhMUEGE1FhByJxFDKBkaEII0KxwRVS0fAkM2JyggkKFhcYGRolJicoKSo0NTY3ODk6Q0RFRkdISUpTVFVWV1hZWmNkZWZnaGlqc3R1dnd4eXqDhIWGh4iJipKTlJWWl5iZmqKjpKWmp6ipqrKztLW2t7i5usLDxMXGx8jJytLT1NXW19jZ2uHi4+Tl5ufo6erx8vP09fb3+Pn6/8QAHwEAAwEBAQEBAQEBAQAAAAAAAAECAwQFBgcICQoL/8QAtREAAgECBAQDBAcFBAQAAQJ3AAECAxEEBSExBhJBUQdhcRMiMoEIFEKRobHBCSMzUvAVYnLRChYkNOEl8RcYGRomJygpKjU2Nzg5OkNERUZHSElKU1RVVldYWVpjZGVmZ2hpanN0dXZ3eHl6goOEhYaHiImKkpOUlZaXmJmaoqOkpaanqKmqsrO0tba3uLm6wsPExcbHyMnK0tPU1dbX2Nna4uPk5ebn6Onq8vP09fb3+Pn6/9oADAMBAAIRAxEAPwDTnszG5wOapXds7cuOO1akmqWzzbNw5HWoLm9t412sc+lEKwTpGI1sXIUJg0yeykkBO3bjitCTUoEbGz5j0povI34ZDj2rb23Uy9kYn2Vl5AJorUN5AGZMYHaiq9sn0J9k11MqOUyHOenepGupN2CwYe9UEuMJjbzU6IJELEnNcNkjscrlhx5rBj1qWOQRtsA5xyapecyjC9qInzJzmlbQd0ia5kAHTr3oqtcSZHSiqSE2f//Z") 50% 58% / cover no-repeat,
+          #f4ede1;
       }
       /* left cream wash on desktop, soft overall wash on mobile — matches the
          real hero's legibility scrims so the swap is invisible */
