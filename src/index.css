@@ -169,22 +169,31 @@ html[lang="hy"] :is(h1, h2, h3) {
      lines; greedy wrapping + the non-breaking spaces baked into the HY copy
      gives tidy, predictable breaks instead. */
   text-wrap: normal;
+  /* Override the global heading `overflow-wrap: anywhere`, which chops long
+     Armenian words mid-glyph and strands a single trailing character
+     («…ասու / մ» / «…տոմ / ս»). break-word keeps whole words and only falls
+     back to the soft hyphens baked into the copy — a tidy syllable break,
+     never an orphan letter. */
+  overflow-wrap: break-word;
+  /* re-enable the manually-placed soft hyphens (the global
+     `.font-display { hyphens: none }` would otherwise disable them, forcing
+     an ugly arbitrary break instead of the intended syllable break). */
+  hyphens: manual;
 }
 /* The hero headline is a two-line slide-up reveal whose masks are tuned to a
    tight leading — keep its original 0.95 so the extra HY heading air doesn't
    pull its two lines apart. */
 html[lang="hy"] #top h1 {
   line-height: 0.95;
-  /* Override the global heading `overflow-wrap: anywhere`, which chops long
-     Armenian words mid-glyph and strands a single trailing character
-     («…ասու / մ»). break-word keeps whole words and only falls back to the
-     soft hyphens baked into the copy — a tidy syllable break, never an
-     orphan letter. */
-  overflow-wrap: break-word;
-  /* re-enable the manually-placed soft hyphens (the global
-     `.font-display { hyphens: none }` would otherwise disable them, forcing
-     an ugly arbitrary break instead of the intended syllable break). */
-  hyphens: manual;
+}
+/* The Quality title sets larger (2.15rem) than the other section heads on
+   mobile; at that size the long Armenian word «բաղադրատոմս» can't share its
+   line and breaks mid-glyph («…տոմ / ս»). Step it down on phones so every
+   word stays whole, matching the tidy desktop wrap. */
+@media (max-width: 767px) {
+  html[lang="hy"] #quality h2 {
+    font-size: 1.85rem;
+  }
 }
 /* Armenian display type also runs wide (long, unbreakable words) — step the
    display sizes down so titles keep to 2-3 lines like their EN/RU
