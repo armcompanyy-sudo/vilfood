@@ -164,12 +164,30 @@ html[lang="hy"] :is(h1, h2, h3) {
      lines; greedy wrapping + the non-breaking spaces baked into the HY copy
      gives tidy, predictable breaks instead. */
   text-wrap: normal;
+  /* Override the global heading `overflow-wrap: anywhere`, which chops long
+     Armenian words mid-glyph and strands a single trailing character
+     («…ասու / մ»). break-word keeps whole words and only falls back to the
+     soft hyphens baked into the copy — a tidy syllable break, never an
+     orphan letter. */
+  overflow-wrap: break-word;
+  /* re-enable the manually-placed soft hyphens (the global
+     `.font-display { hyphens: none }` would otherwise disable them, forcing
+     an ugly arbitrary break instead of the intended syllable break). */
+  hyphens: manual;
 }
 /* Armenian display type also runs wide (long, unbreakable words) — step the
    display sizes down so titles keep to 2-3 lines like their EN/RU
    counterparts instead of stacking one word per line. */
 html[lang="hy"] .text-display-md {
-  font-size: clamp(1.9rem, 4.2vw, 3rem);
+  font-size: clamp(1.9rem, 4vw, 2.7rem);
+}
+/* Quality's title opts into the display size only at md+ via the responsive
+   variant, so the HY cap must cover that class too — otherwise it renders at
+   the full 5rem on desktop and stacks every word on its own line. */
+@media (min-width: 768px) {
+  html[lang="hy"] .md\:text-display-md {
+    font-size: clamp(1.9rem, 4vw, 2.7rem);
+  }
 }
 html[lang="hy"] .text-display-sm {
   font-size: clamp(1.6rem, 3.8vw, 2.6rem);
@@ -181,7 +199,11 @@ html[lang="hy"] [data-deck-card] h3 {
 }
 @media (min-width: 768px) {
   html[lang="hy"] [data-deck-card] h3 {
-    font-size: clamp(2.4rem, 5.2vw, 4rem);
+    /* capped so the longest step word («Նախապատրաստում») stays on one line
+       in the card's text column on desktop; below ~1050px it falls to a
+       neat two-line soft-hyphen break rather than shrinking the shorter
+       titles too far. */
+    font-size: clamp(2.1rem, 4.2vw, 3.2rem);
   }
 }
 
