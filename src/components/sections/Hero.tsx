@@ -66,16 +66,38 @@ export function Hero() {
   // Reduced-motion users get the static image instead of the autoplay video.
   const [reduceMotion] = useState(() => prefersReducedMotion());
 
-  // Play the background video a touch slower for a calmer, more premium feel.
+  // The 4 MB hero video is kept off the critical path: the poster (a small
+  // preloaded webp) is the LCP and paints instantly, then the video source is
+  // attached once the browser is idle so it never competes with first paint.
+  // Same file, full quality — only the load timing changes.
   useEffect(() => {
     const v = videoRef.current;
-    if (!v) return;
+    if (!v || reduceMotion) return;
     const setRate = () => {
       v.playbackRate = 0.8;
     };
-    setRate();
     v.addEventListener("loadedmetadata", setRate);
-    return () => v.removeEventListener("loadedmetadata", setRate);
+
+    let started = false;
+    const start = () => {
+      if (started) return;
+      started = true;
+      v.src = "/video/hero-loop.mp4";
+      v.load();
+      v.play().catch(() => {});
+    };
+    const ric = (window as unknown as {
+      requestIdleCallback?: (cb: () => void, o?: { timeout: number }) => number;
+    }).requestIdleCallback;
+    const id = ric ? ric(start, { timeout: 2500 }) : window.setTimeout(start, 1200);
+
+    return () => {
+      v.removeEventListener("loadedmetadata", setRate);
+      const cic = (window as unknown as { cancelIdleCallback?: (id: number) => void })
+        .cancelIdleCallback;
+      if (ric && cic) cic(id);
+      else window.clearTimeout(id);
+    };
   }, [reduceMotion]);
 
   // headline entrance — unaffected by reduced motion (which skips it entirely)
@@ -127,11 +149,9 @@ export function Hero() {
           muted
           loop
           playsInline
-          preload="auto"
+          preload="none"
           aria-hidden="true"
-        >
-          <source src="/video/hero-loop.mp4" type="video/mp4" />
-        </video>
+        />
       )}
 
       {/* legibility scrims */}
