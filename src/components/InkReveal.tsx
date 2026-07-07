@@ -20,6 +20,14 @@ export function InkReveal() {
 
     const ctx = gsap.context(() => {
       els.forEach((el) => {
+        // Trigger on the title's SECTION, not the element: the products title
+        // lives inside a pinned section, and an element-based trigger
+        // re-created mid-pin (locale switch while the shelf is pinned)
+        // measures against the pinned layout and strands the title in its
+        // faded state. The section's start is stable in both worlds: the
+        // fill runs as the section scrolls in, and a mid-pin re-creation
+        // lands at progress 1 — fully inked.
+        const section = el.closest("section") ?? el;
         gsap.fromTo(
           el,
           { backgroundPosition: "100% 0" },
@@ -27,9 +35,9 @@ export function InkReveal() {
             backgroundPosition: "0% 0",
             ease: "none",
             scrollTrigger: {
-              trigger: el,
-              start: "top 92%",
-              end: "top 42%",
+              trigger: section,
+              start: "top 75%",
+              end: "top 12%",
               scrub: 0.6,
             },
           },
