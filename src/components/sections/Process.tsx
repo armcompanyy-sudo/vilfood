@@ -31,28 +31,28 @@ const NOISE =
 const CARDS = [
   {
     obj: "/img/process/obj-apricot.webp",
-    objClass: "-top-[8%] right-[3%] w-[46%] md:-top-[13%] md:-right-[1%] md:w-[32%]",
+    objClass: "right-[6%] w-[36%] md:right-[8%] md:w-[27%]",
     num: "01",
     tilt: -0.6,
     bg: "#A66B12",
   },
   {
     obj: "/img/process/obj-spoon.webp",
-    objClass: "-top-[11%] right-[7%] w-[36%] md:-top-[15%] md:right-[5%] md:w-[24%]",
+    objClass: "right-[10%] w-[26%] md:right-[12%] md:w-[18%]",
     num: "02",
     tilt: 0.5,
     bg: "#6E1B22",
   },
   {
     obj: "/img/process/obj-jar.webp",
-    objClass: "-top-[8%] right-[6%] w-[36%] md:-top-[12%] md:right-[4%] md:w-[23%]",
+    objClass: "right-[10%] w-[26%] md:right-[12%] md:w-[17%]",
     num: "03",
     tilt: -0.4,
     bg: "#47521F",
   },
   {
     obj: "/img/process/obj-crate.webp",
-    objClass: "-top-[5%] -right-[4%] w-[56%] md:-top-[10%] md:-right-[3%] md:w-[40%]",
+    objClass: "right-[5%] w-[42%] md:right-[6%] md:w-[28%]",
     num: "04",
     tilt: 0.6,
     bg: "#6B6355",
@@ -97,7 +97,7 @@ export function Process() {
         card.style.filter = `brightness(${1 - 0.2 * cover})`;
         const obj = objs[i];
         if (obj) {
-          obj.style.transform = `translateY(${(arriving * 30 - cover * 34).toFixed(1)}px)`;
+          obj.style.transform = `translateY(${(arriving * 16 - cover * 18).toFixed(1)}px)`;
         }
       });
     };
@@ -206,11 +206,13 @@ export function Process() {
                     />
                   </div>
 
-                  {/* the object pops out of the card's top edge */}
+                  {/* the object sits neatly on the card's right side; the
+                      wrapper is a full-height flex so vertical centering
+                      never competes with the parallax transform */}
                   <div
                     data-obj
                     aria-hidden
-                    className={`pointer-events-none absolute will-change-transform ${c.objClass}`}
+                    className={`pointer-events-none absolute inset-y-0 flex items-center will-change-transform ${c.objClass}`}
                   >
                     <div className="obj-float" style={{ animationDelay: `${i * -0.9}s` }}>
                       <img
@@ -225,7 +227,7 @@ export function Process() {
                   </div>
 
                   {/* step copy */}
-                  <div className="relative flex h-full flex-col justify-end px-7 pb-10 md:justify-center md:px-16 md:pb-0">
+                  <div className="relative flex h-full flex-col justify-end px-7 pb-10 md:justify-center md:pb-0 md:pl-16 md:pr-[36%]">
                     <p className="eyebrow flex items-center gap-2.5 text-cream/65">
                       <SunSigil className="h-3.5 w-3.5 shrink-0 text-apricot-light" />
                       {c.num} / 04
