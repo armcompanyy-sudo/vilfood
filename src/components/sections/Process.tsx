@@ -212,7 +212,7 @@ export function Process() {
                   <div
                     data-obj
                     aria-hidden
-                    className={`pointer-events-none absolute inset-y-0 flex items-start pt-[9%] will-change-transform md:items-center md:pt-0 ${c.objClass}`}
+                    className={`pointer-events-none absolute top-0 bottom-[44%] flex items-center will-change-transform md:bottom-0 ${c.objClass}`}
                   >
                     <div className="obj-float" style={{ animationDelay: `${i * -0.9}s` }}>
                       <img
@@ -221,7 +221,7 @@ export function Process() {
                         draggable={false}
                         loading={i === 0 ? "eager" : "lazy"}
                         decoding="async"
-                        className="h-auto w-full select-none [filter:drop-shadow(0_15px_25px_rgba(0,0,0,0.25))]"
+                        className="h-auto w-full select-none"
                       />
                     </div>
                   </div>
