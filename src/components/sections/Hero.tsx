@@ -109,20 +109,20 @@ export function Hero() {
         <picture>
           <source
             type="image/webp"
-            srcSet="/img/hero4k-1280.webp 1280w, /img/hero4k-1920.webp 1920w, /img/hero4k-2560.webp 2560w, /img/hero4k-3840.webp 3840w"
+            srcSet="/img/hero-scene-1280.webp 1280w, /img/hero-scene-1664.webp 1664w"
             sizes="100vw"
           />
           <img
-            src="/img/hero4k-1920.jpg"
+            src="/img/hero-scene-1664.jpg"
             alt={t.a11y.heroImage}
-            className="absolute inset-0 -z-20 h-full w-full object-cover object-[68%_96%]"
+            className="absolute inset-0 -z-20 h-full w-full object-cover object-[50%_62%]"
           />
         </picture>
       ) : (
         <video
           ref={videoRef}
-          className="absolute inset-0 -z-20 h-full w-full object-cover object-[50%_58%]"
-          poster="/img/hero-video-poster.webp"
+          className="absolute inset-0 -z-20 h-full w-full object-cover object-[50%_62%]"
+          poster="/img/hero-video-poster-2.webp"
           autoPlay
           muted
           loop
@@ -130,7 +130,7 @@ export function Hero() {
           preload="auto"
           aria-hidden="true"
         >
-          <source src="/video/hero-loop.mp4" type="video/mp4" />
+          <source src="/video/hero-loop-2.mp4" type="video/mp4" />
         </video>
       )}
 
