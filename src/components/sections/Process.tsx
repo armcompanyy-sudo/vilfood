@@ -90,15 +90,16 @@ export function Process() {
         const top = wrap.getBoundingClientRect().top - i * PEEK;
         const arriving = Math.min(Math.max(top / (vh * 0.5), 0), 1);
         const tilt = Number(card.dataset.tilt) * arriving;
-        // covered: the next card riding over pushes this one into the deck
+        // covered: how far the next card has ridden over this one (drives the
+        // object parallax only — cards keep a constant size so every card,
+        // including the last, ends the deck at identical dimensions)
         let cover = 0;
         const next = wraps[i + 1];
         if (next) {
           const nextTop = next.getBoundingClientRect().top - (i + 1) * PEEK;
           cover = Math.min(Math.max(1 - nextTop / vh, 0), 1);
         }
-        card.style.transform = `rotate(${tilt}deg) scale(${1 - 0.05 * cover})`;
-        card.style.filter = `brightness(${1 - 0.2 * cover})`;
+        card.style.transform = `rotate(${tilt}deg)`;
         const obj = objs[i];
         if (obj) {
           obj.style.transform = `translateY(${(arriving * 26 - cover * 30).toFixed(1)}px)`;
