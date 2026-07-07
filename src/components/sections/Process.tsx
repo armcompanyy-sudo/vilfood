@@ -32,7 +32,7 @@ const CARDS = [
   {
     obj: "/img/process/obj-apricot.webp",
     objClass: "md:right-[8%] md:w-[27%]",
-    objMobile: "w-[62%]",
+    objMobile: "w-[52%]",
     num: "01",
     tilt: -0.9,
     bg: "#A66B12",
@@ -40,7 +40,7 @@ const CARDS = [
   {
     obj: "/img/process/obj-spoon.webp",
     objClass: "md:right-[10%] md:w-[22%]",
-    objMobile: "w-[54%]",
+    objMobile: "w-[46%]",
     num: "02",
     tilt: 0.8,
     bg: "#78212B",
@@ -48,7 +48,7 @@ const CARDS = [
   {
     obj: "/img/process/obj-jar-3.webp",
     objClass: "md:right-[10%] md:w-[21%]",
-    objMobile: "w-[40%]",
+    objMobile: "w-[35%]",
     num: "03",
     tilt: -0.7,
     bg: "#47521F",
@@ -56,7 +56,7 @@ const CARDS = [
   {
     obj: "/img/process/obj-crate-2.webp",
     objClass: "md:right-[9%] md:w-[28%]",
-    objMobile: "w-[74%]",
+    objMobile: "w-[64%]",
     num: "04",
     tilt: 0.9,
     bg: "#453019",
@@ -197,11 +197,14 @@ export function Process() {
                 data-tilt={c.tilt}
                 className="relative h-[min(78vh,700px)] w-full max-w-[1150px] origin-top will-change-transform md:h-[min(74vh,620px)]"
               >
-                <div data-magnetic className="relative h-full w-full will-change-transform">
+                <div
+                  data-magnetic
+                  className="relative h-full w-full overflow-hidden rounded-jar will-change-transform"
+                >
                   {/* card surface: solid brand colour + tactile noise */}
                   <div
                     aria-hidden
-                    className="absolute inset-0 overflow-hidden rounded-jar"
+                    className="absolute inset-0"
                     style={{ backgroundColor: c.bg }}
                   >
                     <span
