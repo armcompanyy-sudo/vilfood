@@ -212,7 +212,7 @@ export function Process() {
                   <div
                     data-obj
                     aria-hidden
-                    className={`pointer-events-none absolute inset-y-0 flex items-center will-change-transform ${c.objClass}`}
+                    className={`pointer-events-none absolute inset-y-0 flex items-start pt-[9%] will-change-transform md:items-center md:pt-0 ${c.objClass}`}
                   >
                     <div className="obj-float" style={{ animationDelay: `${i * -0.9}s` }}>
                       <img
@@ -232,10 +232,10 @@ export function Process() {
                       <SunSigil className="h-3.5 w-3.5 shrink-0 text-apricot-light" />
                       {c.num} / 04
                     </p>
-                    <h3 className="mt-4 font-display text-[2.6rem] font-semibold leading-tight text-cream md:mt-5 md:text-[3.5rem]">
+                    <h3 className="mt-4 font-display text-[2.9rem] font-semibold leading-tight text-cream md:mt-5 md:text-[4rem]">
                       {s.t}
                     </h3>
-                    <p className="mt-4 max-w-[26rem] text-[1.15rem] leading-relaxed text-cream/85 md:mt-6 md:max-w-[30rem] md:text-[1.3rem]">
+                    <p className="mt-4 max-w-[26rem] text-[1.25rem] leading-relaxed text-cream/85 md:mt-6 md:max-w-[32rem] md:text-[1.45rem]">
                       {s.b}
                     </p>
                   </div>

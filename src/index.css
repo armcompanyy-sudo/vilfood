@@ -157,6 +157,16 @@ html[lang="hy"] .text-display-md {
 html[lang="hy"] .text-display-sm {
   font-size: clamp(1.6rem, 3.8vw, 2.6rem);
 }
+/* Process deck card titles: single long Armenian words
+   («Նախապատրաստում») must fit their line at every card width. */
+html[lang="hy"] [data-deck-card] h3 {
+  font-size: 2.1rem;
+}
+@media (min-width: 768px) {
+  html[lang="hy"] [data-deck-card] h3 {
+    font-size: clamp(2.4rem, 5.2vw, 4rem);
+  }
+}
 
 /* ---- Ink-fill titles ----
    Display titles render through a gradient clipped to the glyphs and "fill"
