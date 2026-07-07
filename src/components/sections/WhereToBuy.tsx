@@ -31,15 +31,15 @@ export function WhereToBuy() {
           {RETAILERS.map((name) => (
             <li key={name}>
               {/* wordmark tile — decorative until real logos link out */}
-              <div className="group flex h-28 items-center justify-center bg-cream transition-colors duration-300 hover:bg-cream-deep md:h-32">
-                <span className="font-display text-2xl font-semibold tracking-tight text-ink/35 transition-colors duration-300 group-hover:text-pomegranate md:text-3xl">
+              <div className="group flex min-h-[7rem] min-w-0 items-center justify-center bg-cream px-3 text-center transition-colors duration-300 hover:bg-cream-deep md:min-h-[8rem]">
+                <span className="font-display text-2xl font-semibold tracking-tight text-ink/35 transition-colors duration-300 [overflow-wrap:anywhere] group-hover:text-pomegranate md:text-3xl">
                   {name}
                 </span>
               </div>
             </li>
           ))}
           {/* trailing CTA cell */}
-          <li className="flex h-28 items-center justify-center bg-apricot/15 md:h-32">
+          <li className="flex min-h-[7rem] items-center justify-center bg-apricot/15 px-3 text-center md:min-h-[8rem]">
             <span className="eyebrow text-apricot-deep">{t.find.more}</span>
           </li>
         </ul>

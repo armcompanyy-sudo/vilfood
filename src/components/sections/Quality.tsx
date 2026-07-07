@@ -35,7 +35,7 @@ export function Quality() {
           {t.quality.points.map((p) => (
             <li
               key={p}
-              className="flex flex-1 items-center gap-3 rounded-2xl border border-cream/15 px-5 py-3.5 text-left text-[0.9rem] font-medium leading-snug text-cream/85 sm:justify-center sm:rounded-full sm:px-5 sm:py-4 sm:text-center sm:text-sm"
+              className="flex min-w-0 flex-1 items-center gap-3 rounded-2xl border border-cream/15 px-5 py-3.5 text-left text-[0.9rem] font-medium leading-snug text-cream/85 sm:justify-center sm:rounded-full sm:px-5 sm:py-4 sm:text-center sm:text-sm"
             >
               <SunSigil className="h-4 w-4 shrink-0 text-apricot" />
               {p}

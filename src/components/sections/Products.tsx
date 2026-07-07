@@ -352,9 +352,10 @@ export function Products() {
                   data-group
                   className="relative flex shrink-0 items-end gap-8 md:gap-11"
                 >
-                  {/* group index chip — etched into the shadow under the plank */}
+                  {/* group index chip — etched into the shadow under the plank;
+                      a long translated category clips cleanly, never overflows */}
                   <span
-                    className="eyebrow absolute left-1 whitespace-nowrap text-[0.62rem] text-apricot/75"
+                    className="eyebrow absolute left-1 max-w-[13rem] truncate text-[0.62rem] text-apricot/75"
                     style={{ bottom: -52 }}
                   >
                     {String(gi + 1).padStart(2, "0")} · {t.products.cats[cat]}
@@ -382,8 +383,9 @@ export function Products() {
                         aria-hidden
                         className="absolute -bottom-[3px] left-1/2 h-[7px] w-[84%] -translate-x-1/2 rounded-[50%] bg-black/40 blur-[6px] transition-all duration-500 ease-editorial group-hover/jar:scale-x-90 group-hover/jar:bg-black/25"
                       />
-                      {/* name whispered on the plank face */}
-                      <span className="eyebrow pointer-events-none absolute left-1/2 top-full mt-5 -translate-x-1/2 whitespace-nowrap text-[0.6rem] text-cream/0 transition-colors duration-300 group-hover/jar:text-cream/75">
+                      {/* name whispered on the plank face — one tidy line,
+                          clipped with an ellipsis if a translation runs long */}
+                      <span className="eyebrow pointer-events-none absolute left-1/2 top-full mt-5 max-w-[11rem] -translate-x-1/2 truncate text-[0.6rem] text-cream/0 transition-colors duration-300 group-hover/jar:text-cream/75">
                         {p.name[locale]}
                       </span>
                     </button>

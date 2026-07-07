@@ -35,6 +35,8 @@
 
   .font-display {
     font-optical-sizing: auto;
+    /* display type is short + hand-tuned — never let the browser hyphenate it */
+    hyphens: none;
   }
 
   ::selection {
@@ -60,6 +62,21 @@
   }
   p {
     text-wrap: pretty;
+  }
+  /* i18n safety net (zero-specificity :where so any utility overrides it):
+     no translated string — however long a single word — can spill out of
+     its card, button, chip or cell on any screen width. break-word only
+     breaks a word that genuinely can't fit, so normal wrapping is untouched. */
+  :where(p, li, a, button, span, dd, dt, figcaption, blockquote, label, input, textarea) {
+    overflow-wrap: break-word;
+  }
+}
+
+@layer utilities {
+  /* opt-in soft hyphenation for long-word languages in narrow columns
+     (needs <html lang>); pair with break-word which is already global. */
+  .hyphenate {
+    hyphens: auto;
   }
 }
 
