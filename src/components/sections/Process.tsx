@@ -46,9 +46,9 @@ const CARDS = [
     bg: "#78212B",
   },
   {
-    obj: "/img/process/obj-jar-3.webp",
-    objClass: "md:right-[10%] md:w-[21%]",
-    objMobile: "w-[35%]",
+    obj: "/img/process/obj-jar-cherry.webp",
+    objClass: "md:right-[9%] md:w-[25%]",
+    objMobile: "w-[52%]",
     num: "03",
     tilt: -0.7,
     bg: "#47521F",
