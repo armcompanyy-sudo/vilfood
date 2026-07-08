@@ -1,11 +1,20 @@
 import { useEffect, useRef } from "react";
-import { gsap, ScrollTrigger, EASE, prefersReducedMotion } from "../lib/motion";
+import { gsap, EASE, prefersReducedMotion } from "../lib/motion";
 
 /**
  * Attach the returned ref to a section. Every descendant carrying the
- * `.reveal` class (which starts hidden via CSS) rises + fades in with a
- * staggered, batched ScrollTrigger as it enters the viewport.
- * Reduced-motion users simply see them, no animation.
+ * `.reveal` class (which starts hidden via CSS) rises + fades in as it
+ * enters the viewport. Reduced-motion users simply see them, no animation.
+ *
+ * Two stages, deliberately not driven by the scroll-position ScrollTrigger:
+ *   1. Anything already within the viewport at mount is revealed synchronously
+ *      — a reload that lands mid-page never leaves on-screen copy invisible.
+ *   2. The rest are watched with an IntersectionObserver, which fires reliably
+ *      on scroll, on an anchor/teleport jump and after a post-load layout
+ *      shift. A ScrollTrigger.batch, by contrast, measures against the tall
+ *      sections above and its enter callback is skipped when Lenis flings past
+ *      the start — which is what left the far-down Quality section stranded at
+ *      opacity 0 until the user nudged the scroll.
  */
 export function useScrollReveal<T extends HTMLElement>() {
   const ref = useRef<T>(null);
@@ -21,27 +30,42 @@ export function useScrollReveal<T extends HTMLElement>() {
       return;
     }
 
-    const ctx = gsap.context(() => {
-      const show = (batch: Element[]) =>
-        gsap.to(batch, {
-          opacity: 1,
-          y: 0,
-          duration: 1.1,
-          ease: EASE,
-          stagger: 0.09,
-          overwrite: true,
-        });
-      // both directions — entering from below AND scrolling back up must
-      // reveal; onEnter alone left content permanently invisible when a
-      // section was first reached bottom-up
-      ScrollTrigger.batch(items, {
-        start: "top 86%",
-        onEnter: show,
-        onEnterBack: show,
-      });
-    }, root);
+    const play = (el: Element, delay = 0) =>
+      gsap.to(el, { opacity: 1, y: 0, duration: 1.1, ease: EASE, delay, overwrite: true });
 
-    return () => ctx.revert();
+    // 1) Reveal immediately whatever is already on screen at mount.
+    const vh = window.innerHeight || document.documentElement.clientHeight;
+    const pending: HTMLElement[] = [];
+    let shown = 0;
+    items.forEach((el) => {
+      if (el.getBoundingClientRect().top < vh * 0.9) play(el, shown++ * 0.09);
+      else pending.push(el);
+    });
+    if (!pending.length) return;
+
+    if (typeof IntersectionObserver === "undefined") {
+      pending.forEach((el) => play(el));
+      return;
+    }
+
+    // 2) Watch the rest. Stagger whichever items cross in together (a jump
+    //    reveals the group at once; a slow scroll reveals them one at a time).
+    const io = new IntersectionObserver(
+      (entries, obs) => {
+        entries
+          .filter((e) => e.isIntersecting)
+          .sort((a, b) => a.boundingClientRect.top - b.boundingClientRect.top)
+          .forEach((e, i) => {
+            play(e.target, i * 0.09);
+            obs.unobserve(e.target);
+          });
+      },
+      // reveal once the item is ~10% up from the bottom edge (≈ "top 90%")
+      { rootMargin: "0px 0px -10% 0px" },
+    );
+    pending.forEach((el) => io.observe(el));
+
+    return () => io.disconnect();
   }, []);
 
   return ref;
