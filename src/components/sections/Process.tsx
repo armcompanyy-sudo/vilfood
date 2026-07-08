@@ -30,7 +30,7 @@ const NOISE =
 
 const CARDS = [
   {
-    obj: "/img/process/obj-apricot.webp",
+    obj: "/img/process/obj-cherries.webp",
     objClass: "md:right-[8%] md:w-[27%]",
     objMobile: "w-[52%]",
     num: "01",
